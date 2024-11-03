@@ -35,10 +35,10 @@ const Browse = () => {
   }, []);
 
   return (
-    <div>
+    <div className="p-10">
       {/* Search Bar */}
-      <div className="flex flex-row justify-between p-4">
-        <Input className="m-2 w-[250px]" placeholder="Search" />
+      <div className="flex flex-row justify-between mb-6">
+        <Input className="my-2 mr-2 w-full" placeholder="Search" />
         <Select>
           <SelectTrigger className="m-2 w-full md:w-[200px]">
             <SelectValue placeholder="Location" />
@@ -66,7 +66,7 @@ const Browse = () => {
       </div>
 
       {/* List of Posts  */}
-      <h3 className="mb-10 text-2xl font-semibold text-700">My Posts</h3>
+      <h3 className="mb-8 text-2xl font-semibold text-700">Lost Items</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {datas.map((data) => (
