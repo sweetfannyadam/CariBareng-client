@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   Card,
@@ -12,7 +13,11 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 
-const Auth = () => {
+const Auth = ({ onLogin }) => {
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    onLogin();
+  };
   return (
     <div className="flex items-baseline justify-center min-h-screen mt-20">
       <Tabs defaultValue="signUp" className="w-[400px]">
@@ -54,7 +59,7 @@ const Auth = () => {
                 />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="confirPassword">Username</Label>
+                <Label htmlFor="confirPassword">Confirm Password</Label>
                 <Input
                   id="confirmPassword"
                   placeholder="Re-enter your password"
@@ -62,7 +67,9 @@ const Auth = () => {
               </div>
             </CardContent>
             <CardFooter className="justify-end">
-              <Button>Create Account</Button>
+              <Link to="/dashboard">
+                <Button>Create Account</Button>
+              </Link>
             </CardFooter>
           </Card>
         </TabsContent>
@@ -89,7 +96,9 @@ const Auth = () => {
               </div>
             </CardContent>
             <CardFooter className="justify-end">
-              <Button>Login</Button>
+              <Link to="/dashboard">
+                <Button>Login</Button>
+              </Link>
             </CardFooter>
           </Card>
         </TabsContent>

@@ -1,5 +1,5 @@
-import React from 'react';
-import Header from './components/Header';
+import React, { useState } from 'react';
+import Header from './components/Header/Header';
 import { AppSidebar } from './components/Sidebar';
 import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 
