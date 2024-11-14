@@ -6,6 +6,10 @@ import Auth from './pages/Auth.jsx';
 import Browse from './pages/Browse.jsx';
 import Layout from './layout.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
+import AboutUs from './pages/aboute-us/AboutUs.jsx';
+import Contact from './pages/contact/Contact.jsx';
+
+
 
 function App() {
   return (
@@ -40,6 +44,22 @@ function App() {
           element={
             <Layout withHeader={true} withSidebar={true}>
               <Dashboard />
+            </Layout>
+          }
+        />
+        <Route
+          path="/about-us"
+          element={
+            <Layout withHeader={true} withSidebar={true}>
+              <AboutUs />
+            </Layout>
+          }
+        />
+        <Route
+          path="/contact"
+          element={
+            <Layout withHeader={true} withSidebar={true}>
+              <Contact />
             </Layout>
           }
         />

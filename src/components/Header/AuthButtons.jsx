@@ -6,7 +6,7 @@ const AuthButtons = () => (
     <li>
       <Link
         to="/auth"
-        className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black"
+        className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
       >
         <span className="relative">
           Login
@@ -17,7 +17,7 @@ const AuthButtons = () => (
     <li>
       <Link
         to="/auth"
-        className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black"
+        className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
       >
         <span className="relative">
           Sign Up
