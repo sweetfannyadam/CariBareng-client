@@ -1,7 +1,5 @@
 import React from 'react';
 import { z } from 'zod';
-import { useForm } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { useNavigate } from 'react-router-dom';
 
 const signUpFormSchema = z.object({
@@ -86,4 +84,4 @@ const loginFormSchema = z.object({
     }),
 });
 
-export default { signUpFormSchema, loginFormSchema };
+export { signUpFormSchema, loginFormSchema };
