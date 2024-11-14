@@ -19,8 +19,8 @@ const Header = () => {
 
   console.log(pathname);
   return (
-    <header className="bg-transparent p-4">
-      <nav className="flex justify-between items-center mt-2 text-[13px] font-bold">
+    <header className="px-10 py-5 border-b bg-sky-500">
+      <nav className="flex justify-between items-center text-base md:text-xl font-bold">
         <NavLinks />
         {pathname != '/' && isLoggedIn ? (
           <UserMenu onLogout={handleLogout} />
