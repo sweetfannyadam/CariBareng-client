@@ -3,7 +3,12 @@ import Header from './components/Header/Header';
 import { AppSidebar } from './components/Sidebar';
 import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 
-const layout = ({ children, withHeader = false, withSidebar = false }) => {
+const layout = ({
+  children,
+  withHeader = false,
+  withSidebar = false,
+  isLoggedIn = false,
+}) => {
   if (withSidebar) {
     return (
       <div>

@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -12,12 +13,46 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormLabel,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { z } from 'zod';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { signUpFormSchema, loginFormSchema } from '@/components/AuthSchema';
 
-const Auth = ({ onLogin }) => {
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    onLogin();
+const Auth = () => {
+  const onSignUp = (values) => {
+    console.log('SignUp??', values);
   };
+
+  const onLogin = (values) => {
+    console.log('Login??', values);
+  };
+
+  const signUpForm = useForm({
+    resolver: zodResolver(signUpFormSchema),
+    defaultValues: {
+      name: '',
+      username: '',
+      email: '',
+      password: '',
+      confirmPassword: '',
+    },
+  });
+
+  const loginForm = useForm({
+    resolver: zodResolver(loginFormSchema),
+    defaultValues: {
+      username: '',
+      password: '',
+    },
+  });
   return (
     <div className="flex items-baseline justify-center min-h-screen mt-20">
       <Tabs defaultValue="signUp" className="w-[400px]">
@@ -34,43 +69,107 @@ const Auth = ({ onLogin }) => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="name">Name</Label>
-                <Input id="name" placeholder="Your fullname" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input id="username" placeholder="Choose a username" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="email">Email</Label>
-                <Input
-                  type="email"
-                  id="email"
-                  placeholder="Enter your email address"
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  type="password"
-                  id="password"
-                  placeholder="Create a strong password"
-                />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="confirPassword">Confirm Password</Label>
-                <Input
-                  id="confirmPassword"
-                  placeholder="Re-enter your password"
-                />
-              </div>
+              <Form {...signUpForm}>
+                <form
+                  onSubmit={signUpForm.handleSubmit(onSignUp)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={signUpForm.control}
+                    name="name"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Name</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="name"
+                            type="text"
+                            placeholder="Enter your fullname"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signUpForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="username"
+                            type="text"
+                            placeholder="Choose a username"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signUpForm.control}
+                    name="email"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Email</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="email"
+                            type="email"
+                            placeholder="Enter your email address"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signUpForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="password"
+                            type="password"
+                            placeholder="Create a password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={signUpForm.control}
+                    name="confirmPassword"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Confirm Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="confirmPassword"
+                            type="password"
+                            placeholder="Re-enter your password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <CardFooter className="justify-end">
+                    <Button type="submit">Create Account</Button>
+                  </CardFooter>
+                </form>
+              </Form>
             </CardContent>
-            <CardFooter className="justify-end">
-              <Link to="/dashboard">
-                <Button>Create Account</Button>
-              </Link>
-            </CardFooter>
           </Card>
         </TabsContent>
         <TabsContent value="login">
@@ -82,24 +181,53 @@ const Auth = ({ onLogin }) => {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-2">
-              <div className="space-y-1">
-                <Label htmlFor="username">Username</Label>
-                <Input id="username" placeholder="Enter your username" />
-              </div>
-              <div className="space-y-1">
-                <Label htmlFor="password">Password</Label>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="Enter your password"
-                />
-              </div>
+              <Form {...loginForm}>
+                <form
+                  onSubmit={loginForm.handleSubmit(onLogin)}
+                  className="space-y-8"
+                >
+                  <FormField
+                    control={loginForm.control}
+                    name="username"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Username</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="username"
+                            type="text"
+                            placeholder="Enter your username"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={loginForm.control}
+                    name="password"
+                    render={({ field }) => (
+                      <FormItem className="space-y-1">
+                        <FormLabel>Password</FormLabel>
+                        <FormControl>
+                          <Input
+                            id="password"
+                            type="password"
+                            placeholder="Enter your password"
+                            {...field}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <CardFooter className="justify-end">
+                    <Button type="submit">Login</Button>
+                  </CardFooter>
+                </form>
+              </Form>
             </CardContent>
-            <CardFooter className="justify-end">
-              <Link to="/dashboard">
-                <Button>Login</Button>
-              </Link>
-            </CardFooter>
           </Card>
         </TabsContent>
       </Tabs>
