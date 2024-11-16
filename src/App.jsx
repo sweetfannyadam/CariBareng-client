@@ -8,6 +8,7 @@ import Layout from './layout.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import AboutUs from './pages/aboute-us/AboutUs.jsx';
 import Contact from './pages/contact/Contact.jsx';
+import AddItemLose from './pages/addItemLose.jsx';
 
 
 
@@ -44,6 +45,14 @@ function App() {
           element={
             <Layout withHeader={true} withSidebar={true}>
               <Dashboard />
+            </Layout>
+          }
+        />
+        <Route
+          path="/dashboard/post-item"
+          element={
+            <Layout>
+              <AddItemLose />
             </Layout>
           }
         />

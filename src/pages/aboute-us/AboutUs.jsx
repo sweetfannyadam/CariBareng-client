@@ -4,7 +4,7 @@ const AboutUs = () => {
   return (
     <article className='py-10 px-20'>
         <h1 className='text-center text-6xl font-bold py-5 pb-20 text-sky-500'>Tentang Cari Bareng</h1>
-        <div className='flex gap'>
+        <div className='flex flex-col-reverse md:flex-row'>
             <div className='flex flex-col gap-5'>
                 <div>
                     <h2 className='text-sky-500 text-lg font-semibold pb-5'>Apa Sih Itu Cari Bareng?</h2>

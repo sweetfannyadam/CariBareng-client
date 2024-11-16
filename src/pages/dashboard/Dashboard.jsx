@@ -12,6 +12,7 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const [datas, setData] = useState([]);
@@ -40,12 +41,14 @@ export default function Dashboard() {
       </div>
 
       {/* List of Posts */}
-      <h3 className="mb-10 text-2xl font-semibold text-700">My Posts</h3>
+      <h3 className="mb-5 text-2xl font-semibold text-700">My Posts</h3>
 
       <div className="flex justify-end mb-4">
-        <Button>
-          <Plus className="h-4 w-4 mr-2" />
-          <span>Post Item</span>
+        <Button className='bg-sky-500 shadow-lg'>
+          <a href="/dashboard/post-item" className='flex items-center'>
+            <Plus className="h-4 w-4 mr-2" />
+            <span>Post Item</span>
+          </a>
         </Button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
