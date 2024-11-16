@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+
 const NavLinks = () => (
   <>
     <img src='caribareng.png' alt='logo cari bareng' className='w-20 mr-10 shadow-md bg-white p-2 rounded-t-2xl rounded-l-2xl'/>
