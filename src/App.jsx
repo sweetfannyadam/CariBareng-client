@@ -13,8 +13,6 @@ import AddItemLose from './pages/addItemLose.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Edit from './pages/profile/edit.jsx';
 
-
-
 function App() {
   return (
     <Router>
