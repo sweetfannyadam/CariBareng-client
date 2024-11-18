@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const AuthButtons = () => (
-  <ul className="flex space-x-4">
+  <ul className="flex justify-between gap-5">
     <li>
       <Link
         to="/auth"

@@ -2,9 +2,9 @@ import React from 'react'
 
 const AboutUs = () => {
   return (
-    <article className='py-10 px-20'>
-        <h1 className='text-center text-6xl font-bold py-5 pb-20 text-sky-500'>Tentang Cari Bareng</h1>
-        <div className='flex flex-col-reverse md:flex-row'>
+    <article className='py-10 px-5 md:px-20'>
+        <h1 className='text-center text-2xl lg:text-3xl xl:text-6xl font-bold py-5 lg:pb-20 text-sky-500'>Tentang CariBareng</h1>
+        <div className='flex flex-col-reverse xl:flex-row gap-5'>
             <div className='flex flex-col gap-5'>
                 <div>
                     <h2 className='text-sky-500 text-lg font-semibold pb-5'>Apa Sih Itu Cari Bareng?</h2>
@@ -23,7 +23,7 @@ const AboutUs = () => {
                     <p className='pr-20'>Pengguna dapat memasukkan laporan barang hilang atau barang yang ditemukan melalui platform kami. Informasi ini kemudian dapat diakses oleh orang lain yang ingin mencari atau membantu menemukan barang tersebut. Cari Bareng berperan sebagai jembatan yang mempercepat proses pencarian dengan cara yang efisien dan aman.</p>
                 </div>
             </div>
-            <img src='Media-Digital.jpg' />
+            <img className='h-60 xl:h-auto object-cover object-center' src='Media-Digital.jpg' alt='MEDIA DIGITAL' />
         </div>
     </article>
   )

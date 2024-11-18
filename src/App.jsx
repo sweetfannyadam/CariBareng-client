@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Layout from './layout.jsx';
+
+// pages
 import Home from './pages/Home.jsx';
-import Header from './components/Header/Header.jsx';
 import Auth from './pages/Auth.jsx';
 import Browse from './pages/Browse.jsx';
-import Layout from './layout.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import AboutUs from './pages/aboute-us/AboutUs.jsx';
 import Contact from './pages/contact/Contact.jsx';
 import AddItemLose from './pages/addItemLose.jsx';
+import Profile from './pages/profile/Profile.jsx';
+import Edit from './pages/profile/edit.jsx';
 
 
 
@@ -35,7 +38,7 @@ function App() {
         <Route
           path="/browse"
           element={
-            <Layout withHeader={true} withSidebar={true}>
+            <Layout withHeader={true}>
               <Browse />
             </Layout>
           }
@@ -43,7 +46,7 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <Layout withHeader={true} withSidebar={true}>
+            <Layout withHeader={true}>
               <Dashboard />
             </Layout>
           }
@@ -59,7 +62,7 @@ function App() {
         <Route
           path="/about-us"
           element={
-            <Layout withHeader={true} withSidebar={true}>
+            <Layout withHeader={true}>
               <AboutUs />
             </Layout>
           }
@@ -67,8 +70,24 @@ function App() {
         <Route
           path="/contact"
           element={
-            <Layout withHeader={true} withSidebar={true}>
+            <Layout withHeader={true}>
               <Contact />
+            </Layout>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <Layout withHeader={true}>
+              <Profile />
+            </Layout>
+          }
+        />
+        <Route
+          path="/profile/edit"
+          element={
+            <Layout>
+              <Edit />
             </Layout>
           }
         />
