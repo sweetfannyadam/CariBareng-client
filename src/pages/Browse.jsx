@@ -35,12 +35,12 @@ const Browse = () => {
   }, []);
 
   return (
-    <div className="p-10">
+    <div className="pt-10 px-5 md:px-20 xl:px-40">
       {/* Search Bar */}
-      <div className="flex flex-row justify-between mb-6">
-        <Input className="my-2 mr-2 w-full" placeholder="Search" />
+      <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
+        <Input className="w-full" placeholder="Search" />
         <Select>
-          <SelectTrigger className="m-2 w-full md:w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
@@ -50,7 +50,7 @@ const Browse = () => {
           </SelectContent>
         </Select>
         <Select>
-          <SelectTrigger className="m-2 w-full md:w-[200px]">
+          <SelectTrigger className="w-full md:w-[200px]">
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
@@ -59,7 +59,7 @@ const Browse = () => {
             <SelectItem value="accessories">Accessories</SelectItem>
           </SelectContent>
         </Select>
-        <Button className="m-2">
+        <Button className="">
           <Search className="h-4 w-4 mr-2" />
           <span>Search</span>
         </Button>

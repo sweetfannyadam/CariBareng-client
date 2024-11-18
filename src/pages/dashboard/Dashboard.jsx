@@ -29,7 +29,7 @@ export default function Dashboard() {
   console.log(datas);
 
   return (
-    <div className="p-6 mt-6">
+    <div className="pt-6 px-5 md:px-20 lg:px-40 mt-6">
       {/* Welcome Section */}
       <h2 className="mb-10 text-2xl font-semibold text-700">
         Welcome back, [User's Name]!

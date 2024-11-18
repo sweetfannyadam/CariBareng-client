@@ -1,7 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Header from './components/Header/Header';
-import { AppSidebar } from './components/Sidebar';
-import { SidebarProvider, SidebarTrigger } from './components/ui/sidebar';
 
 const layout = ({
   children,

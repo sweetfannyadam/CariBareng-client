@@ -17,25 +17,13 @@ import { Link } from 'react-router-dom';
 import { CardDemo } from '../Notifications';
 
 const UserMenu = ({ onLogout }) => (
-  <ul className="flex space-x-4">
-    <li>
-      <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
-        <Popover>
-          <PopoverTrigger>
-            <Bell className="w-6 h-6" />
-          </PopoverTrigger>
-          <PopoverContent className={'relative top-0 bottom-0 right-0 left-0'}>
-            <CardDemo className={'w-full'} />
-          </PopoverContent>
-        </Popover>
-      </div>
-    </li>
+  <ul className="flex justify-between gap-5">
     <li>
       <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
         <DropdownMenu>
           <DropdownMenuTrigger>
             <span className="relative">
-              <UserRound className="w-6 h-6" />
+              <UserRound className="w-6 h-6 text-white" />
             </span>
           </DropdownMenuTrigger>
           <DropdownMenuContent>
@@ -58,6 +46,19 @@ const UserMenu = ({ onLogout }) => (
         </DropdownMenu>
       </div>
     </li>
+    <li>
+      <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
+        <Popover>
+          <PopoverTrigger>
+            <Bell className="w-6 h-6 text-white" />
+          </PopoverTrigger>
+          <PopoverContent className={'relative top-0 bottom-0 right-0 left-0'}>
+            <CardDemo className={'w-full'} />
+          </PopoverContent>
+        </Popover>
+      </div>
+    </li>
+    
   </ul>
 );
 

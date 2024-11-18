@@ -10,8 +10,8 @@ const AddItemLose = () => {
   const [formData, setFormData] = useState({
     name: '',
     category: '',
-    dateTime: '',
-    lastViewed: '',
+    date_time: '',
+    last_viewed: '',
     description: '',
     images: ['', '', ''],
     contact: '',
@@ -30,10 +30,10 @@ const AddItemLose = () => {
 
   const validateForm = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = 'Name is required.';
+    if (!formData.title) newErrors.title = 'Title is required.';
     if (!formData.category) newErrors.category = 'Category is required.';
-    if (!formData.dateTime) newErrors.dateTime = 'Date and time are required.';
-    if (!formData.lastViewed) newErrors.lastViewed = 'Last viewed location is required.';
+    if (!formData.date_time) newErrors.date_time = 'Date and time are required.';
+    if (!formData.last_viewed) newErrors.last_viewed = 'Last viewed location is required.';
     if (!formData.description) newErrors.description = 'Description is required.';
     if (!formData.contact) newErrors.contact = 'Contact is required.';
     if (!location) newErrors.location = 'Location must be selected.';
@@ -57,14 +57,14 @@ const AddItemLose = () => {
             <div className='grid md:grid-cols-3 gap-5'>
               {/* Name Item */}
               <div>
-                <Label htmlFor="name">Name Item</Label>
+                <Label htmlFor="title">title Item</Label>
                 <Input
-                  id="name"
-                  placeholder="Name of your item"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                  id="title"
+                  placeholder="Title of your item"
+                  value={formData.title}
+                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                 />
-                {errors.name && <span className="text-red-500">{errors.name}</span>}
+                {errors.title && <span className="text-red-500">{errors.title}</span>}
               </div>
 
               {/* Category */}
@@ -90,27 +90,27 @@ const AddItemLose = () => {
 
               {/* Date and Time */}
               <div>
-                <Label htmlFor="datetime">Date and Time</Label>
+                <Label htmlFor="date_time">Date and Time</Label>
                 <Input
                   type="datetime-local"
-                  id="datetime"
-                  value={formData.dateTime}
-                  onChange={(e) => setFormData({ ...formData, dateTime: e.target.value })}
+                  id="date_time"
+                  value={formData.date_time}
+                  onChange={(e) => setFormData({ ...formData, date_time: e.target.value })}
                 />
-                {errors.dateTime && <span className="text-red-500">{errors.dateTime}</span>}
+                {errors.date_time && <span className="text-red-500">{errors.date_time}</span>}
               </div>
             </div>
 
             {/* Last Viewed Location */}
             <div>
-              <Label htmlFor="lastViewed">Last Viewed Location</Label>
+              <Label htmlFor="last_viewed">Last Viewed Location</Label>
               <Input
-                id="lastViewed"
+                id="last_viewed"
                 placeholder="Enter your last viewed location"
-                value={formData.lastViewed}
-                onChange={(e) => setFormData({ ...formData, lastViewed: e.target.value })}
+                value={formData.last_viewed}
+                onChange={(e) => setFormData({ ...formData, last_viewed: e.target.value })}
               />
-              {errors.lastViewed && <span className="text-red-500">{errors.lastViewed}</span>}
+              {errors.last_viewed && <span className="text-red-500">{errors.last_viewed}</span>}
             </div>
 
             {/* Description */}
