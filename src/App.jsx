@@ -12,6 +12,8 @@ import Contact from './pages/contact/Contact.jsx';
 import AddItemLose from './pages/addItemLose.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Edit from './pages/profile/edit.jsx';
+import { GuestRoute } from './components/GuestRoute.jsx';
+import ProtectedRoute from './components/ProtectedRoute.jsx';
 
 function App() {
   return (
@@ -28,9 +30,11 @@ function App() {
         <Route
           path="/auth"
           element={
-            <Layout>
-              <Auth />
-            </Layout>
+            <GuestRoute>
+              <Layout>
+                <Auth />
+              </Layout>
+            </GuestRoute>
           }
         />
         <Route
@@ -44,17 +48,21 @@ function App() {
         <Route
           path="/dashboard"
           element={
-            <Layout withHeader={true}>
-              <Dashboard />
-            </Layout>
+            <ProtectedRoute>
+              <Layout withHeader={true}>
+                <Dashboard />
+              </Layout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard/post-item"
           element={
-            <Layout>
-              <AddItemLose />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <AddItemLose />
+              </Layout>
+            </ProtectedRoute>
           }
         />
         <Route
@@ -76,17 +84,21 @@ function App() {
         <Route
           path="/profile"
           element={
-            <Layout withHeader={true}>
-              <Profile />
-            </Layout>
+            <ProtectedRoute>
+              <Layout withHeader={true}>
+                <Profile />
+              </Layout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/profile/edit"
           element={
-            <Layout>
-              <Edit />
-            </Layout>
+            <ProtectedRoute>
+              <Layout>
+                <Edit />
+              </Layout>
+            </ProtectedRoute>
           }
         />
       </Routes>
