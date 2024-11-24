@@ -1,12 +1,11 @@
 import React from 'react';
 import Header from './components/Header/Header';
+import { useAuth } from './context/AuthContext';
 
-const layout = ({
-  children,
-  withHeader = false,
-  withSidebar = false,
-  isLoggedIn = false,
-}) => {
+const Layout = ({ children, withHeader = false, withSidebar = false }) => {
+  const { user } = useAuth();
+  const isLoggedIn = user != null;
+
   if (withSidebar) {
     return (
       <div>
@@ -14,7 +13,7 @@ const layout = ({
           <SidebarProvider>
             <AppSidebar />
             <main className="min-h-screen w-full">
-              {withHeader && <Header />}
+              {withHeader && <Header isLoggedIn={isLoggedIn} />}
               {children}
               <SidebarTrigger />
             </main>
@@ -25,10 +24,10 @@ const layout = ({
   }
   return (
     <div>
-      {withHeader && <Header />}
+      {withHeader && <Header isLoggedIn={isLoggedIn} />}
       {children}
     </div>
   );
 };
 
-export default layout;
+export default Layout;
