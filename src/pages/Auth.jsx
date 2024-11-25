@@ -91,10 +91,18 @@ const Auth = () => {
         username: values.username,
         password: values.password,
       };
+
       const response = await axiosInstance.post('/login', payload);
-      const { user, token } = response.data;
-      console.log(user, token);
-      login(user, token);
+
+      const { accessToken, refreshToken } = response.data.data;
+      console.log(
+        'This is accessToken and refreshToken: ',
+        accessToken,
+        refreshToken
+      );
+
+      login(accessToken, refreshToken);
+
       navigate('/browse');
     } catch (error) {
       toast({
