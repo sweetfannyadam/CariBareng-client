@@ -1,16 +1,16 @@
 import { useAuth } from '@/context/AuthContext';
-import { useNavigate } from 'react-router-dom';
+import { Navigate, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 const ProtectedRoute = ({ children }) => {
-  const { token, loading } = useAuth();
+  const { isAuthenticated, loading, token } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (!loading && !token) {
-      navigate('/auth');
+    if (!loading && !isAuthenticated) {
+      navigate('/auth', { replace: true });
     }
-  }, [token, loading, navigate]);
+  }, [isAuthenticated, loading, navigate]);
 
   if (loading || !token) {
     return null;
