@@ -6,27 +6,28 @@ import UserMenu from './UserMenu';
 import { useAuth } from '../../context/AuthContext';
 
 const Header = () => {
-  const { user, logout } = useAuth();
-  const isLoggedIn = user != null;
+  const { isAuthenticated, user } = useAuth();
+  const isLoggedIn = isAuthenticated;
   const location = useLocation();
   const pathname = location.pathname;
-  const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate('/');
-  };
+  console.log('This is user: ', user);
+  console.log('This is isLoggedIn: ', isLoggedIn);
+  console.log('This is isAuthenticated: ', isAuthenticated);
 
-  console.log(pathname);
   return (
     <header className="px-10 py-5 border-b bg-sky-500">
       <nav className="flex justify-between items-center text-base md:text-xl font-bold">
         <NavLinks />
-        {pathname !== '/' && isLoggedIn ? (
-          <UserMenu onLogout={handleLogout} />
-        ) : (
-          <AuthButtons />
-        )}
+        {/* {isLoggedIn ? <UserMenu onLogout={handleLogout} /> : <AuthButtons />} */}
+
+        {pathname !== '/' && isLoggedIn
+          ? (console.log('pathname:', pathname),
+            console.log('isLoggedIn:', isLoggedIn),
+            (<UserMenu />))
+          : (console.log('pathname:', pathname),
+            console.log('isLoggedIn:', isLoggedIn),
+            (<AuthButtons />))}
       </nav>
     </header>
   );

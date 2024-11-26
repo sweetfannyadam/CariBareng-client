@@ -3,8 +3,8 @@ import Header from './components/header/Header';
 import { useAuth } from './context/AuthContext';
 
 const Layout = ({ children, withHeader = false }) => {
-  const { user } = useAuth();
-  const isLoggedIn = user != null;
+  const { isAuthenticated } = useAuth;
+  const isLoggedIn = isAuthenticated;
 
   return (
     <div>
