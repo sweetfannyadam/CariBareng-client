@@ -22,7 +22,6 @@ import DeleteDrawer from './DeleteDrawer';
 import MarkAsFoundDrawer from './MarkAsFoundDrawer';
 
 export default function MissingItemCard({ title, category, image, count }) {
-  console.log(title, category, image, count);
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );

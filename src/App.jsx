@@ -11,7 +11,7 @@ import AboutUs from './pages/aboute-us/AboutUs.jsx';
 import Contact from './pages/contact/Contact.jsx';
 import AddItemLose from './pages/addItemLose.jsx';
 import Profile from './pages/profile/Profile.jsx';
-import Edit from './pages/profile/edit.jsx';
+import Edit from './pages/profile/EditProfile.jsx';
 import { GuestRoute } from './components/GuestRoute.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 

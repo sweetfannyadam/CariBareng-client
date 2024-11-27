@@ -70,6 +70,20 @@ export const AuthProvider = ({ children }) => {
     checkTokenExpiry();
   }, [token]);
 
+  const fetchUser = async (token) => {
+    try {
+      const response = await axiosInstance.get('/users', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(response.data.data);
+    } catch (error) {
+      console.error(
+        'Error fetching user:',
+        error.response?.data || error.message
+      );
+    }
+  };
+
   const login = (newToken, refreshToken) => {
     setToken(newToken);
     setAccessToken(newToken);
@@ -85,23 +99,6 @@ export const AuthProvider = ({ children }) => {
 
     localStorage.setItem('accessToken', newToken);
     localStorage.setItem('refreshToken', refreshToken);
-  };
-
-  const fetchUser = async (token) => {
-    console.log('This token: ', token);
-
-    try {
-      const response = await axiosInstance.get('/users', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(response.data);
-      console.log('This setUser: ', response.data.data);
-    } catch (error) {
-      console.error(
-        'Error fetching user:',
-        error.response?.data || error.message
-      );
-    }
   };
 
   const logout = () => {
