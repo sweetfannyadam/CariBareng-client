@@ -44,7 +44,7 @@ export default function Dashboard() {
       <h3 className="mb-5 text-2xl font-semibold text-700">My Posts</h3>
 
       <div className="flex justify-end mb-4">
-        <Button className='bg-sky-500 shadow-lg'>
+        <Button className='bg-primary border-2 border-primary text-white hover:bg-primary-foreground hover:text-primary shadow-lg'>
           <a href="/dashboard/post-item" className='flex items-center'>
             <Plus className="h-4 w-4 mr-2" />
             <span>Post Item</span>

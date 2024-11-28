@@ -4,22 +4,18 @@ import { Link } from 'react-router-dom';
 
 const Home = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen px-5 md:px-10 xl:px-40">
-      <section className="flex flex-col-reverse md:flex-row justify-center items-center ">
-        <img className='w-[400px]' src='missing-found.jpg' alt='missing found' />
-        <div className='xl:px-20'>
-          <h1 className="text-2xl md:text-4xl font-bold mb-3">Welcome to <span className='text-sky-500'>CariBareng</span></h1>
-          <p className="md:text-lg mb-10">Kami adalah platform yang membantu Anda menemukan barang yang hilang
-            dan terhubung dengan orang-orang di sekitar Anda. Dengan mudah, Anda
-            dapat melaporkan barang yang hilang dan mencari barang yang mungkin
-            telah ditemukan oleh orang lain.</p>
-
+    <div className="flex flex-col items-center justify-center min-h-screen px-5 md:px-10 xl:px-36">
+      <section className="flex flex-col-reverse md:flex-row justify-between items-start">
+        <div className='mt-5 lg:mt-0 xl:pr-20'>
+          <h1 className="text-2xl md:text-4xl font-bold mb-3">Welcome to <span className='text-primary'>CariBareng</span></h1>
+          <p className="md:text-lg mb-10">We are a platform that helps you find lost items and connect with people around you. With ease, you can report lost items and search for items that may have been found by someone else.</p>
           <Link to="/browse">
-            <Button className="focus-visible:ring-transparent bg-sky-500" variant="default">
-              Lihat Barang yang Hilang
+            <Button className="focus-visible:ring-transparent bg-primary hover:bg-primary-foreground hover:text-primary border border-primary" variant="default">
+            View Lost Items
             </Button>
           </Link>
         </div>
+        <img className='lg:w-1/2 rounded-2xl' src='missing-found.png' alt='missing found' />
       </section>
     </div>
   );

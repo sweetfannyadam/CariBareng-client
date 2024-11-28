@@ -1,5 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import MissingItemCard from '@/components/MissingItemCard';
 import { Input } from '@/components/ui/input';
 import {
@@ -21,17 +20,58 @@ import {
 } from '@/components/ui/select';
 import { Search } from 'lucide-react';
 
+import categories from '@/assets/data/categories';
+
 const Browse = () => {
-  const [datas, setData] = useState([]);
+  const [datas, setDatas] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [loadingData, setLoadingData] = useState(true);
+  const [loadingLocations, setLoadingLocations] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        'https://cari-barengbackend-production.up.railway.app/missings'
+      );
+      const raw_data = await response.json();
+      setDatas(raw_data.data || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const fetchLocations = async () => {
+    try {
+      const query = `
+      [out:json];
+      area["name"="Indonesia"]->.searchArea;
+      relation["admin_level"="5"](area.searchArea);
+      out tags;
+      `;
+      const response = await fetch('https://overpass-api.de/api/interpreter', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: `data=${encodeURIComponent(query)}`,
+      });
+      const data = await response.json();
+      const locationNames = (data.elements || [])
+        .filter((element) => element.tags && element.tags.name)
+        .map((element) => element.tags.name);
+      setLocations(locationNames);
+    } catch (error) {
+      console.error('Error fetching locations:', error);
+    } finally {
+      setLoadingLocations(false);
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await fetch('https://fakestoreapi.com/products');
-      const raw_data = await response.json();
-      const data = raw_data.slice(0, 5);
-      setData(data);
-    };
-    getData();
+    fetchData();
+    fetchLocations();
   }, []);
 
   return (
@@ -44,9 +84,17 @@ const Browse = () => {
             <SelectValue placeholder="Location" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="jakarta">Jakarta</SelectItem>
-            <SelectItem value="bandung">Bandung</SelectItem>
-            <SelectItem value="surabaya">Surabaya</SelectItem>
+            {loadingLocations ? (
+              <SelectItem disabled value="loading">
+                Loading locations...
+              </SelectItem>
+            ) : (
+              locations.map((location, index) => (
+                <SelectItem key={index} value={location.toLowerCase()}>
+                  {location}
+                </SelectItem>
+              ))
+            )}
           </SelectContent>
         </Select>
         <Select>
@@ -54,30 +102,34 @@ const Browse = () => {
             <SelectValue placeholder="Category" />
           </SelectTrigger>
           <SelectContent>
-            <SelectItem value="electronics">Electronics</SelectItem>
-            <SelectItem value="clothing">Clothing</SelectItem>
-            <SelectItem value="accessories">Accessories</SelectItem>
+            {categories.map((category, index) => (
+              <SelectItem key={index} value={category}>
+                {category}
+              </SelectItem>
+            ))}
           </SelectContent>
         </Select>
-        <Button className="">
+        <Button>
           <Search className="h-4 w-4 mr-2" />
           <span>Search</span>
         </Button>
       </div>
 
-      {/* List of Posts  */}
-      <h3 className="mb-8 text-2xl font-semibold text-700">Lost Items</h3>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {datas.map((data) => (
-          <MissingItemCard
-            key={data.id}
-            title={data.title}
-            category={data.category}
-            image={data.image}
-            count={data.rating.count}
-          />
-        ))}
+      {/* List of Posts */}
+      <h3 className="mb-8 text-2xl font-semibold text-gray-700">Lost Items</h3>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {loadingData ? (
+          <p>Loading items...</p>
+        ) : (
+          datas.map((data) => (
+            <MissingItemCard
+              key={data.tableId}
+              title={data.title}
+              category={data.category}
+              images={data.images}
+            />
+          ))
+        )}
       </div>
 
       {/* Pagination */}
@@ -100,4 +152,5 @@ const Browse = () => {
     </div>
   );
 };
+
 export default Browse;

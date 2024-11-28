@@ -19,7 +19,7 @@ const Header = () => {
 
   console.log(pathname);
   return (
-    <header className="px-10 py-5 border-b bg-sky-500">
+    <header className="px-10 py-5 border-b bg-primary">
       <nav className="flex justify-between items-center text-base md:text-xl font-bold">
         <NavLinks />
         {pathname !== '/' && isLoggedIn ? (
