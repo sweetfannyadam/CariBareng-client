@@ -14,6 +14,7 @@ import Profile from './pages/profile/Profile.jsx';
 import Edit from './pages/profile/edit.jsx';
 import { GuestRoute } from './components/GuestRoute.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import DetailMissingItemCard from './pages/DetailMissingItemCard.jsx';
 
 function App() {
   return (
@@ -42,6 +43,14 @@ function App() {
           element={
             <Layout withHeader={true}>
               <Browse />
+            </Layout>
+          }
+        />
+        <Route
+          path="/detail"
+          element={
+            <Layout withHeader={true}>
+              <DetailMissingItemCard />
             </Layout>
           }
         />

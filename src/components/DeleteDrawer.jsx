@@ -17,7 +17,7 @@ export function DeleteDrawer() {
     <Drawer>
       <DrawerTrigger>
         <Button
-          className="text-gray-700 transition-colors duration-300 ease-in-out hover:text-black"
+          className="text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
           variant="ghost"
           size="sm"
         >

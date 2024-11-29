@@ -6,22 +6,22 @@ const AuthButtons = () => (
     <li>
       <Link
         to="/auth"
-        className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
+        className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
       >
         <span className="relative">
           Login
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
         </span>
       </Link>
     </li>
     <li>
       <Link
         to="/auth"
-        className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
+        className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
       >
         <span className="relative">
           Sign Up
-          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
         </span>
       </Link>
     </li>

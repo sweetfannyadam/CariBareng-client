@@ -2,62 +2,46 @@ import React from 'react';
 
 const AboutUs = () => {
   return (
-    <article className="py-10 px-20">
-      <h1 className="text-center text-6xl font-bold py-5 pb-20 text-sky-500">
-        Tentang Cari Bareng
+    <article className="py-10 lg:px-20 2xl:px-36">
+      <h1 className="text-center text-2xl lg:text-6xl font-bold py-5 pb-20 text-secondary-foreground">
+        About <span className='text-primary'>CariBareng</span>
       </h1>
-      <div className="flex gap">
+      <div className="flex flex-col-reverse lg:flex-row px-5">
         <div className="flex flex-col gap-5">
-          <div>
-            <h2 className="text-sky-500 text-lg font-semibold pb-5">
-              Apa Sih Itu Cari Bareng?
+          <div className='mt-5 lg:mt-0'>
+            <h2 className="text-secondary-foreground text-lg font-semibold pb-4">
+            What is CariBareng?
             </h2>
-            <p className="pr-20">
-              Cari Bareng merupakan sebuah platform digital yang dirancang untuk
-              memudahkan proses pelaporan dan pencarian barang-barang hilang.
-              Dengan menggunakan teknologi terkini, kami menghadirkan solusi
-              agar pencarian barang yang hilang menjadi lebih mudah dan cepat.
+            <p className="lg:pr-20 text-primary">
+            CariBareng is a digital platform designed to facilitate the process of reporting and searching for lost items. Using the latest technology, we provide solutions to make finding lost items easier and faster.
             </p>
           </div>
           <div>
-            <h2 className="text-sky-500 text-lg font-semibold pb-5">
-              Mengapa Cari Bareng Dibuat?
+            <h2 className="text-secondary-foreground text-lg font-semibold pb-4">
+            Why CariBareng?
             </h2>
-            <p className="pr-20">
-              Di zaman serba digital ini, kehilangan barang penting bisa menjadi
-              pengalaman yang penuh stres dan merepotkan. Metode pencarian
-              tradisional melalui media sosial atau komunikasi langsung sering
-              kali kurang efektif. Cari Bareng hadir untuk menjawab kebutuhan
-              ini dengan menawarkan solusi yang praktis dan dapat diakses secara
-              online.
+            <p className="lg:pr-20 text-primary">
+            In this digital age, losing an important item can be a stressful and inconvenient experience. Traditional search methods through social media or direct communication are often less effective. CariBareng is here to address this need by offering a solution that is practical and accessible online.
             </p>
           </div>
           <div>
-            <h2 className="text-sky-500 text-lg font-semibold pb-5">
-              Manfaat Cari Bareng untuk Anda
+            <h2 className="text-secondary-foreground text-lg font-semibold pb-4">
+            What are the benefits of CariBareng for you?
             </h2>
-            <p className="pr-20">
-              Cari Bareng membantu menghubungkan orang yang kehilangan barang
-              dengan mereka yang menemukannya. Dengan fitur-fitur yang mudah
-              digunakan, platform ini bertujuan untuk membuat proses pencarian
-              barang lebih sederhana dan terarah, sehingga dapat mengurangi
-              kecemasan yang sering timbul saat kehilangan barang.
+            <p className="lg:pr-20 text-primary">
+            CariBareng helps connect people who have lost items with those who have found them. With easy-to-use features, the platform aims to make the process of finding items simpler and more targeted, thereby reducing the anxiety that often comes with losing items.
             </p>
           </div>
           <div>
-            <h2 className="text-sky-500 text-lg font-semibold pb-5">
-              Bagaimana Cara Kerja Cari Bareng?
+            <h2 className="text-secondary-foreground text-lg font-semibold pb-4">
+            How does CariBareng work?
             </h2>
-            <p className="pr-20">
-              Pengguna dapat memasukkan laporan barang hilang atau barang yang
-              ditemukan melalui platform kami. Informasi ini kemudian dapat
-              diakses oleh orang lain yang ingin mencari atau membantu menemukan
-              barang tersebut. Cari Bareng berperan sebagai jembatan yang
-              mempercepat proses pencarian dengan cara yang efisien dan aman.
+            <p className="lg:pr-20 text-primary">
+            Users can enter reports of lost or found items through our platform. This information can then be accessed by others who want to search or help find the item. Cari Bareng acts as a bridge that speeds up the search process in a safe efficient way.
             </p>
           </div>
         </div>
-        <img src="Media-Digital.jpg" />
+        <img className='lg:w-1/3 lg:h-80 object-cover' src="Media-Digital.png" />
       </div>
     </article>
   );
