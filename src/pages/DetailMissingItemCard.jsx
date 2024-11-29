@@ -1,7 +1,78 @@
-const DetailMissingItemCard = () => {
-  return (
-    <div>DetailMissingItemCard</div>
-  )
-}
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
+import { useEffect, useState } from "react";
+import MapComponent from "@/components/MapComponent";
+import { Label } from "@/components/ui/label";
+import Loading from "@/components/Loading";
+// Adjust the import path as needed
 
-export default DetailMissingItemCard
+const DetailMissingItemCard = () => {
+  const [datas, setData] = useState(null);
+  const [lat, setLat] = useState(null);
+  const [lng, setLng] = useState(null);
+
+  
+  useEffect(() => {
+    const getData = async () => {
+      const response = await fetch("https://fakestoreapi.com/products/1");
+      const raw_data = await response.json();
+      setData(raw_data);
+    };
+    getData();
+    const exampleMap = {
+      lat: -6.1751,
+      lng: 106.865,
+    };
+    
+    // Add the lat and lng to the state
+    setLat(exampleMap.lat);
+    setLng(exampleMap.lng);
+  }, []);
+
+  console.log(datas);
+
+  return (
+    <div className="px-5 md:px-10 lg:px-10 xl:px-20 2xl:px-60 pt-10 relative">
+      {datas ? (
+        <div className="flex flex-col lg:flex-row gap-10">
+          <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-72 2xl:mb-56 rounded-xl shadow-xl">
+            <CarouselContent className="h-[500px] lg:w-[350px] lg:h-[250px] xl:w-[500px] xl:h-[400px] flex items-center">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <CarouselItem  key={index}>
+                    <img
+                      className="object-cover object-center"
+                      src={datas.image}
+                      alt={datas.title}
+                    />
+                </CarouselItem>
+                ))}
+            </CarouselContent>
+            <div className="mt-20 lg:hidden"></div>
+            <div className="flex justify-center ml-[9%] lg:-mt-14 xl:-mt-10 relative">
+              <div>
+                <CarouselPrevious className='px-10 rounded-xl -top-12 lg:top-20 -left-5' />
+                <CarouselNext className="px-10 rounded-xl -top-12 left-[25rem] md:left-[32rem] lg:top-20 lg:left-52 xl:left-80 xl:ml-3" />
+              </div>
+            </div>
+          </Carousel>
+          <div className="mt-5 flex-col flex gap-5 text-xl">
+            <p className="font-semibold">Item Categories: {datas.category}</p>
+            <h1 className="text-3xl">{datas.title}</h1>
+            <p className="text-2xl font-bold">Reward: {datas.price}K</p>
+            <p>Phone Number : 08 823 326 0238</p>
+            <p>Date : 24/11/2024</p>
+            <hr className="text-primary" />
+            <p>{datas.description}</p>
+            <div className="mt-5 border-2 border-primary p-5 rounded-xl shadow-xl mb-20">
+                <p>Was last seen : <span className="font-bold">Di jalan deket Kali subur</span></p>
+                <MapComponent setLat={setLat} setLng={setLng} />
+            </div>
+          </div>
+        </div>
+      ) : (
+        <Loading />
+      )}
+    </div>
+  );
+};
+
+export default DetailMissingItemCard;

@@ -1,7 +1,7 @@
 import MissingItemCard from '@/components/MissingItemCard'
 import StatsCard from '@/components/StatsCard';
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
