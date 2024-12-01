@@ -1,7 +1,7 @@
 import MissingItemCard from '@/components/MissingItemCard'
 import StatsCard from '@/components/StatsCard';
 import { Button } from '@/components/ui/button'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
@@ -21,14 +21,14 @@ const Profile = () => {
         <section className='flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10'>
             <div className='flex items-center gap-10 '>
                 <div id="profile_img" className='rounded-full border-4 w-40 h-40 md:w-60 md:h-60 overflow-hidden'>
-                    <img src="missing-found.jpg" alt="" />
+                    <img src="profile.jpg" alt="" />
                 </div>
                 <div id="profile_info" className='text-2xl flex flex-col gap-3'>
                     <p> [username] </p>
                     <p> [email]</p>
                     <p> [phone number] </p>
                     <Link to="/profile/edit">
-                        <Button className="bg-sky-500">Edit Profile</Button>
+                        <Button className="bg-primary border-2 border-primary text-white hover:bg-primary-foreground hover:text-primary">Edit Profile</Button>
                     </Link>
                 </div>
             </div>

@@ -9,25 +9,34 @@ const NavLinks = () => (
       <li>
         <Link
           to="/"
-          className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
         >
-          Home
+          <span className="relative">
+            Home
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
         </Link>
       </li>
       <li>
         <Link
           to="/about-us"
-          className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
         >
-          About Us
+          <span className="relative">
+            About Us
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
         </Link>
       </li>
       <li>
         <Link
           to="/contact"
-          className="group flex items-center text-white transition-colors duration-300 ease-in-out hover:text-black"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
         >
-          Contact
+          <span className="relative">
+            Contact
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
         </Link>
       </li>
     </ul>

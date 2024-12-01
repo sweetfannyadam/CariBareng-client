@@ -8,7 +8,7 @@ const Layout = ({ children, withHeader = false }) => {
 
   return (
     <div>
-      <main className="min-h-screen w-full">
+      <main className="min-h-screen w-full bg-background">
         {withHeader && <Header isLoggedIn={isLoggedIn} />}
         {children}
       </main>
