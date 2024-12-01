@@ -29,6 +29,7 @@
     "clsx": "^2.1.1",
     "embla-carousel-autoplay": "^8.3.1",
     "embla-carousel-react": "^8.3.1",
+    "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.453.0",
     "react-hook-form": "^7.53.1",
     "react-router-dom": "^6.27.0",

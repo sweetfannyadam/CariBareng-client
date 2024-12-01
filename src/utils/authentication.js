@@ -27,14 +27,6 @@ export const getRefreshToken = () => {
     .split('; ')
     .find((row) => row.startsWith('refreshToken='));
   return refreshToken ? refreshToken.split('=')[1] : null;
-
-  // const cookies = document.cookie.split(';');
-  // cookies.forEach((cookie) => {
-  //   if (cookie.trim().startsWith('refreshToken=')) {
-  //     refreshToken = cookie.split('=')[1];
-  //   }
-  // });
-  // return refreshToken;
 };
 
 // Function to store refresh token in cookies
