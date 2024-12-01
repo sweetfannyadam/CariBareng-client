@@ -26,7 +26,6 @@ export default function Dashboard() {
     };
     getData();
   }, []);
-  console.log(datas);
 
   return (
     <div className="pt-6 px-5 md:px-20 lg:px-40 mt-6">
@@ -44,8 +43,8 @@ export default function Dashboard() {
       <h3 className="mb-5 text-2xl font-semibold text-700">My Posts</h3>
 
       <div className="flex justify-end mb-4">
-        <Button className='bg-primary border-2 border-primary text-white hover:bg-primary-foreground hover:text-primary shadow-lg'>
-          <a href="/dashboard/post-item" className='flex items-center'>
+        <Button className="bg-primary border-2 border-primary text-white hover:bg-primary-foreground hover:text-primary shadow-lg">
+          <a href="/dashboard/post-item" className="flex items-center">
             <Plus className="h-4 w-4 mr-2" />
             <span>Post Item</span>
           </a>

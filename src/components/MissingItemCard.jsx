@@ -1,10 +1,6 @@
 import React from 'react';
 import { Edit } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import {
   Carousel,
@@ -18,7 +14,7 @@ import { Link } from 'react-router-dom';
 import DeleteDrawer from './DeleteDrawer';
 import MarkAsFoundDrawer from './MarkAsFoundDrawer';
 
-export default function MissingItemCard({ title = 'Unknown Title', category = 'Uncategorized', images = [] }) {
+export default function MissingItemCard({ title, category, image, count }) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
@@ -60,8 +56,8 @@ export default function MissingItemCard({ title = 'Unknown Title', category = 'U
 
         {/* Card Footer */}
         <CardFooter className="bg-primary grid p-5 rounded-b-xl text-white">
-            <h3 className="font-semibold truncate">{title}</h3>
-            <p className="text-sm text-gray-100">{category}</p>
+          <h3 className="font-semibold truncate">{title}</h3>
+          <p className="text-sm text-gray-100">{category}</p>
           <div className="mt-4 flex justify-end gap-2">
             {/* Edit Button */}
             <Button

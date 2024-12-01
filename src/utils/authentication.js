@@ -1,5 +1,4 @@
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
 import axiosInstance from '@/api/axios';
 
 // Function to decode the JWT token

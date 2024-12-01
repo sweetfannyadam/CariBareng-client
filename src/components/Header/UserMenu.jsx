@@ -1,5 +1,5 @@
 import React from 'react';
-import { Bell, UserRound, UserRoundPen, Settings, LogOut } from 'lucide-react';
+import { Bell, UserRound, UserRoundPen, Sun, Moon, LogOut } from 'lucide-react';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +34,40 @@ const UserMenu = () => {
       <li>
         <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
           <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="focus-visible:outline-none focus-visible:ring-transparent"
+              >
+                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+                <Moon
+                  className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+                  color="#86efac"
+                />
+                <span className="sr-only">Toggle theme</span>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                onClick={() => console.log('Light theme')}
+                className="dark:text-green-300"
+              >
+                Light
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                onClick={() => console.log('Dark theme')}
+                className="dark:text-green-300"
+              >
+                Dark
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      </li>
+      <li>
+        <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
+          <DropdownMenu>
             <DropdownMenuTrigger>
               <span className="relative">
                 <UserRound className="w-6 h-6 text-white" />
@@ -44,10 +78,7 @@ const UserMenu = () => {
                 <UserRoundPen className="w-4 h-4" />
                 <Link to="/profile">Profile</Link>
               </DropdownMenuItem>
-              <DropdownMenuItem className="text-gray-700 transition-colors duration-300 ease-in-out hover:text-black">
-                <Settings className="w-4 h-4" />
-                <Link to="/settings">Settings</Link>
-              </DropdownMenuItem>
+
               <DropdownMenuItem className="text-gray-700 transition-colors duration-300 ease-in-out hover:text-black">
                 <button
                   onClick={handleLogout}
