@@ -6,9 +6,8 @@ import {
   getAccessToken,
   decodeToken,
   isTokenValid,
-} from '@/utils/authUtils';
+} from '@/utils/authentication';
 import axiosInstance from '../api/axios';
-import { useNavigate } from 'react-router-dom';
 
 const AuthContext = createContext();
 
