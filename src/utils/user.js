@@ -15,9 +15,9 @@ export const fetchUser = async (token) => {
   }
 };
 
-export const updateUser = async (token, data) => {
+export const updateUser = async (token, payload) => {
   try {
-    const response = await axiosInstance.put('/users', data, {
+    const response = await axiosInstance.put('/users', payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
     return response.data.data;
@@ -48,3 +48,6 @@ export const fetchUserMissingItems = async (token) => {
     console.error('Error fetching total posts:', error);
   }
 };
+
+const data = await fetchUser();
+console.log('fetchUser data:', data);

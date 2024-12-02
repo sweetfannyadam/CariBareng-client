@@ -42,7 +42,7 @@ export const AuthProvider = ({ children }) => {
   // User Data
   const loadUser = async (token) => {
     const userData = await fetchUser(token);
-
+    console.log('Auth loadUser:', userData);
     if (userData) {
       setUser(userData);
     }
