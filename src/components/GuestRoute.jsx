@@ -3,16 +3,17 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 
 export const GuestRoute = ({ children }) => {
-  const { token } = useAuth();
+  const { isAuthenticated } = useAuth();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token) {
-      navigate('/dashboard'); // Redirect logged-in users to the dashboard
+    if (isAuthenticated) {
+      navigate('/profile');
     }
-  }, [token, navigate]);
+  }, [isAuthenticated, navigate]);
 
-  if (token) return null; // Prevent rendering for logged-in users
-
+  if (isAuthenticated) {
+    return null;
+  }
   return children;
 };

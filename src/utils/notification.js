@@ -1,5 +1,23 @@
 import axiosInstance from '@/api/axios';
 
+export const createNotification = async (token, payload, target) => {
+  try {
+    const response = await axiosInstance.post(
+      `/notifications/${target}`,
+      payload,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          body: JSON.stringify(payload),
+        },
+      }
+    );
+    return response.data.data;
+  } catch (error) {
+    console.error('Error creating notification:', error);
+  }
+};
+
 export const fetchAllNotifications = async (token) => {
   try {
     const response = await axiosInstance.get('/notifications', {

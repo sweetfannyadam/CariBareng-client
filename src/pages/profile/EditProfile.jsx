@@ -1,14 +1,19 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
 import React from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
+import { useToast } from '@/hooks/use-toast';
+import { useLocation, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { fetchUser, updateUser, uploadProfilePicture } from '@/utils/user';
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
   editProfileFormSchema,
   uploadProfilePictureFormSchema,
 } from '@/schema/EditProfileSchema';
-import { zodResolver } from '@hookform/resolvers/zod';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
 import {
   Form,
   FormControl,
@@ -18,7 +23,6 @@ import {
   FormMessage,
   FormDescription,
 } from '@/components/ui/form';
-import { updateUser, uploadProfilePicture } from '@/utils/user';
 import {
   Card,
   CardContent,
@@ -27,27 +31,37 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-import { useToast } from '@/hooks/use-toast';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { useAuth } from '@/context/AuthContext';
+import { BarLoader } from 'react-spinners';
+import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
 
 const EditProfile = () => {
-  const { register, handleSubmit } = useForm();
-  const { user, token, isAuthenticated } = useAuth();
-  const navigate = useNavigate();
-  const { toast } = useToast();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate();
+
+  const { user, token, isAuthenticated } = useAuth();
+  const { toast } = useToast();
 
   const editProfileForm = useForm({
     resolver: zodResolver(editProfileFormSchema),
     defaultValues: {
-      fullname: '',
-      username: '',
-      gmail: '',
-      no_hp: '',
-      password: '',
-      confirm_password: '',
+      fullname: user?.fullname || '',
+      username: user?.username || '',
+      gmail: user?.gmail || '',
+      no_hp: user?.no_hp || '',
+      password: user?.password || '',
+      confirm_password: user?.confirm_password || '',
     },
   });
 
@@ -89,24 +103,42 @@ const EditProfile = () => {
   };
 
   const onUpload = async (data) => {
-    console.log('Clicked on upload button');
+    setIsUploading(true);
+    setUploadStatus(null);
+    setUploadProgress(0);
+
+    const file = data.file[0];
+    if (!file) {
+      setUploadStatus({ type: 'error', message: 'No file selected.' });
+      setIsUploading(false);
+      return;
+    }
+
+    // Create FormData
     const formData = new FormData();
-    formData.append('file', data.file[0]);
+    formData.append('file', file);
 
-    console.log('Image Data:', ...formData.entries());
+    try {
+      const response = await uploadProfilePicture(token);
 
-    // try {
-    //   uploadProfilePicture(token, formData);
+      if (!response.ok) {
+        throw new Error('File upload failed.');
+      }
 
-    //   toast({
-    //     variant: 'default',
-    //     description: 'Profile picture updated!',
-    //   });
-
-    //   return response.data.data;
-    // } catch (error) {
-    //   console.error('Error uploading profile picture:', error);
-    // }
+      setUploadStatus({
+        type: 'success',
+        message: 'File uploaded successfully!',
+      });
+    } catch (error) {
+      setUploadStatus({
+        type: 'error',
+        message: error.message || 'File upload failed. Please try again.',
+      });
+    } finally {
+      setIsUploading(false);
+      setUploadProgress(0);
+      reset(); // Reset the form after upload
+    }
   };
 
   return (
@@ -118,36 +150,91 @@ const EditProfile = () => {
             src="../missing-found.jpg"
             alt="foto [username]"
           />
-          <Form {...uploadProfilePictureForm}>
-            <form
-              onSubmit={handleSubmit(onUpload)}
-              className="flex flex-col gap-2"
-            >
-              <FormField
-                control={uploadProfilePictureForm.control}
-                name="Profile Picture"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Profile Picture</FormLabel>
-                    <FormControl>
-                      <Input
-                        {...uploadProfilePictureForm}
-                        type="file"
-                        // accept="jpeg,jpg,png"
-                        {...register('file')}
-                        // onChange={(event) =>
-                        //   onChange(event.target.files && event.target.files[0])
-                        // }
-                      />
-                    </FormControl>
-                    <FormDescription />
-                    <FormMessage />
-                  </FormItem>
-                )}
+          <form onSubmit={handleSubmit(onUpload)} className="space-y-6">
+            <div>
+              <Label
+                htmlFor="file"
+                className="text-sm font-medium"
+                style={{ color: '#2C3E50' }}
+              >
+                Choose a file
+              </Label>
+              <Input
+                id="file"
+                type="file"
+                {...register('file', {
+                  required: 'Please select a file',
+                  validate: {
+                    lessThan10MB: (files) =>
+                      files[0]?.size < 10000000 || 'Max 10MB',
+                    acceptedFormats: (files) =>
+                      ['image/jpeg', 'image/png', 'application/pdf'].includes(
+                        files[0]?.type
+                      ) || 'Only JPEG, PNG, or PDF files are allowed',
+                  },
+                })}
+                className="mt-1"
+                disabled={isUploading}
               />
-              <Button type="submit">Upload</Button>
-            </form>
-          </Form>
+              {errors.file && (
+                <p className="mt-1 text-sm" style={{ color: '#e74c3c' }}>
+                  {errors.file.message}
+                </p>
+              )}
+            </div>
+
+            <div className="flex justify-end">
+              <Button
+                type="submit"
+                disabled={isUploading}
+                style={{
+                  backgroundColor: '#89A8B2',
+                  color: 'white',
+                  '&:hover': { backgroundColor: '#5D7A8C' },
+                }}
+              >
+                {isUploading ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Uploading
+                  </>
+                ) : (
+                  'Upload'
+                )}
+              </Button>
+            </div>
+          </form>
+
+          {isUploading && (
+            <div className="mt-4">
+              <Progress value={uploadProgress} className="w-full" />
+              <p
+                className="text-sm text-center mt-2"
+                style={{ color: '#2C3E50' }}
+              >
+                Uploading: {uploadProgress}%
+              </p>
+            </div>
+          )}
+
+          {uploadStatus && (
+            <Alert
+              className="mt-4"
+              variant={
+                uploadStatus.type === 'success' ? 'default' : 'destructive'
+              }
+            >
+              {uploadStatus.type === 'success' ? (
+                <CheckCircle2 className="h-4 w-4" />
+              ) : (
+                <AlertCircle className="h-4 w-4" />
+              )}
+              <AlertTitle>
+                {uploadStatus.type === 'success' ? 'Success' : 'Error'}
+              </AlertTitle>
+              <AlertDescription>{uploadStatus.message}</AlertDescription>
+            </Alert>
+          )}
         </div>
         <Form {...editProfileForm}>
           <form
@@ -238,47 +325,6 @@ const EditProfile = () => {
             </CardFooter>
           </form>
         </Form>
-        {/* <form action="" className="flex flex-col gap-5">
-          <div className="grid grid-cols-2 gap-5">
-            <div>
-              <Label htmlFor="username">Username</Label>
-              <Input
-                type="text"
-                name="username"
-                id="username"
-                placeholder="[Username]"
-              />
-            </div>
-            <div>
-              <Label htmlFor="email">Email</Label>
-              <Input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="[Email]"
-              />
-            </div>
-          </div>
-          <div>
-            <Label htmlFor="telephone">Phone Number</Label>
-            <Input
-              type="number"
-              name="telephone"
-              id="telephone"
-              placeholder="[no phone]"
-            />
-          </div>
-          <div>
-            <Label htmlFor="about_me">About Me</Label>
-            <Textarea className="h-60" name="about_me" id="about_me"></Textarea>
-            <span>Tulis cerita singkat tentang diri Anda.</span>
-          </div>
-          <Input
-            type="submit"
-            value="Update Profile"
-            className="bg-sky-500 text-white"
-          />
-        </form> */}
       </div>
     </div>
   );
