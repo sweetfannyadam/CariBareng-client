@@ -11,23 +11,13 @@ const Header = () => {
   const location = useLocation();
   const pathname = location.pathname;
 
-  console.log('This is user: ', user);
-  console.log('This is isLoggedIn: ', isLoggedIn);
-  console.log('This is isAuthenticated: ', isAuthenticated);
-
   return (
     <header className="px-10 py-5 border-b bg-primary">
       <nav className="flex justify-between items-center text-base md:text-xl font-bold">
         <NavLinks />
         {/* {isLoggedIn ? <UserMenu onLogout={handleLogout} /> : <AuthButtons />} */}
 
-        {pathname !== '/' && isLoggedIn
-          ? (console.log('pathname:', pathname),
-            console.log('isLoggedIn:', isLoggedIn),
-            (<UserMenu />))
-          : (console.log('pathname:', pathname),
-            console.log('isLoggedIn:', isLoggedIn),
-            (<AuthButtons />))}
+        {pathname !== '/' && isLoggedIn ? <UserMenu /> : <AuthButtons />}
       </nav>
     </header>
   );

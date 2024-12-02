@@ -6,8 +6,10 @@ import {
   getAccessToken,
   decodeToken,
   isTokenValid,
+  setRefreshToken,
+  clearTokens,
 } from '@/utils/authentication';
-import axiosInstance from '../api/axios';
+import { fetchUser } from '@/utils/user';
 
 const AuthContext = createContext();
 
@@ -20,47 +22,46 @@ export const AuthProvider = ({ children }) => {
 
   const isAuthenticated = !!token;
 
+  // Authentication
+  const login = (newToken, refreshToken) => {
+    setToken(newToken);
+    setAccessToken(newToken);
+    setRefreshToken(refreshToken);
+
+    const decodedToken = decodeToken(newToken);
+    setTokenExpiration(decodedToken.exp);
+  };
+
+  const logout = () => {
+    setUser(null);
+    setToken(null);
+    clearTokens();
+    localStorage.removeItem('access_token_expiration');
+  };
+
+  // User Data
+  const loadUser = async (token) => {
+    const userData = await fetchUser(token);
+    console.log('Auth loadUser:', userData);
+    if (userData) {
+      setUser(userData);
+    }
+  };
+
   useEffect(() => {
     const checkTokenExpiry = async () => {
       const token = getAccessToken();
 
       if (token) {
-        const decodedToken = decodeToken(token);
-        // const expirationTime = localStorage.getItem('access_token_expiration');
-        // const currentTime = Date.now();
-
-        setToken(token);
-        console.log('This is decodeToken.exp: ', decodedToken.exp);
-        // setTokenExpiration(decodedToken.exp);
-        await fetchUser(token);
-
-        // if (currentTime > expirationTime) {
-        //   try {
-        //     const newToken = await refreshToken();
-        //     if (newToken) {
-        //       setAccessToken(newToken);
-        //       setTokenExpiration(decodedToken.exp);
-        //       setToken(newToken);
-
-        //       localStorage.setItem('access_token_expiration', isTokenValid);
-        //     } else {
-        //       logout();
-        //       setToken(null);
-        //     }
-        //   } catch (error) {
-        //     console.error('Error refreshing token:', error);
-        //     logout();
-        //     setToken(null);
-        //   }
-        // } else {
-        //   setUser(null);
-        // }
+        const tokenValidation = isTokenValid(token);
+        if (tokenValidation) {
+          await loadUser(token);
+          return;
+        }
       } else {
         setUser(null);
       }
 
-      console.log('User in AuthContext:', user);
-      console.log('Token in AuthContext:', token);
       console.log('isAuthenticated in AuthContext:', isAuthenticated);
 
       setIsLoading(false);
@@ -69,50 +70,9 @@ export const AuthProvider = ({ children }) => {
     checkTokenExpiry();
   }, [token]);
 
-  const fetchUser = async (token) => {
-    try {
-      const response = await axiosInstance.get('/users', {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setUser(response.data.data);
-    } catch (error) {
-      console.error(
-        'Error fetching user:',
-        error.response?.data || error.message
-      );
-    }
-  };
-
-  const login = (newToken, refreshToken) => {
-    setToken(newToken);
-    setAccessToken(newToken);
-
-    const decodedToken = decodeToken(newToken);
-
-    setTokenExpiration(decodedToken.exp);
-    console.log('This is decodeToken.exp: ', decodedToken.exp);
-    console.log('This is decodeToken.user: ', decodedToken.user);
-
-    console.log('User after login:', userData);
-    console.log('Token after login:', newToken);
-
-    localStorage.setItem('accessToken', newToken);
-    localStorage.setItem('refreshToken', refreshToken);
-  };
-
-  const logout = () => {
-    localStorage.removeItem('accessToken');
-    localStorage.removeItem('access_token_expiration');
-
-    const remaining_token = localStorage.getItem('accessToken');
-    console.log(remaining_token);
-    setUser(null);
-    setToken(null);
-  };
-
   return (
     <AuthContext.Provider
-      value={{ user, token, login, logout, isLoading, isAuthenticated }}
+      value={{ user, token, isLoading, isAuthenticated, login, logout }}
     >
       {children}
     </AuthContext.Provider>
