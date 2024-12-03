@@ -7,7 +7,7 @@ const MapComponent = ({ lat, lng }) => {
       <MapContainer
         center={[lat, lng]}
         zoom={13}
-        className="w-full h-[200px]"
+        className="w-full h-[200px] z-10"
       >
         {/* Lapisan Peta */}
         <TileLayer

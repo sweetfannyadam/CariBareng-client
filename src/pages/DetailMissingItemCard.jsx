@@ -3,12 +3,19 @@ import { useEffect, useState } from "react";
 import MapComponent from "@/components/MapComponent";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/Loading";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import FoundThisItem from "@/components/FoundThisItem";
+import { Edit } from "lucide-react";
+import DeleteDrawer from "@/components/DeleteDrawer";
+import { useAuth } from "@/context/AuthContext";
+
 // Adjust the import path as needed
 
 const DetailMissingItemCard = () => {
   const [datas, setData] = useState(null);
   const { id } = useParams();
+  const { user, token } = useAuth();
   
   useEffect(() => {
     const getData = async () => {
@@ -19,8 +26,6 @@ const DetailMissingItemCard = () => {
     };
     getData();
   }, []);
-
-  console.log(datas);
 
   return (
     <div className="px-5 md:px-10 lg:px-10 xl:px-20 2xl:px-60 pt-10 relative">
@@ -53,15 +58,43 @@ const DetailMissingItemCard = () => {
             </div>
           )}
           <div className="mt-5 flex-col flex gap-5 text-xl w-full">
-            <p className="font-semibold">Item Categories: {datas.category}</p>
-            <h1 className="text-3xl">{datas.title}</h1>
-            <p className="text-2xl font-bold">Reward: {datas.reward}</p>
-            <p>Phone Number : {datas.contact}</p>
-            <p>Date : {datas.date_time}</p>
-            <hr className="text-primary" />
-            <p>{datas.description}</p>
+            <div className="grid grid-flow-col gap-10">
+              <div className="flex flex-col gap-5">
+                <p className="font-semibold">Item Categories: {datas.category}</p>
+                <h1 className="text-3xl">{datas.title}</h1>
+                <p className="text-2xl font-bold">Reward: {datas.reward}</p>
+                <p>Phone Number : {datas.contact}</p>
+                <p>Date : {datas.date_time}</p>
+                <hr className="text-primary" />
+                <p>{datas.description}</p>
+              </div>
+              <div className="grid gap-5 mt-5">
+                <div className="flex flex-col gap-3 bg-primary text-white p-5 rounded-lg">
+                  <Label>Missing Person : <span className="font-bold text-lg">{datas.users.username}</span></Label>
+                  <Label>City : <span className="font-bold text-lg">{datas.cordinate}</span></Label>
+                  <Label>Reward : <span className="font-bold text-lg">{datas.reward}</span></Label>
+                  <Label>Status : <span className="font-bold text-lg">{datas.status}</span></Label>
+                </div>
+                <div className="w-full grid grid-flow-col content-center gap-5">
+                  {user.id === datas.user_id ? (
+                    <>
+                      <Button
+                        className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg"
+                      >
+                        <Link to="/edit-item">
+                          <Edit className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <DeleteDrawer id={datas.id} />
+                    </>
+                  ) : (
+                    <FoundThisItem title={datas.title} token={token} username={datas.users.username} />
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="mt-5 border-2 border-primary p-5 rounded-xl shadow-xl mb-20">
-                <p>Was last seen : <span className="font-bold">{datas.last_viewed}</span></p>
+                <p className="mb-2">Was last seen : <span className="font-bold">{datas.last_viewed}</span></p>
                 <MapComponent lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
             </div>
           </div>
