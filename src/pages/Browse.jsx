@@ -21,6 +21,7 @@ import {
 import { Search } from 'lucide-react';
 
 import categories from '@/assets/data/categories';
+import Loading from '@/components/Loading';
 
 const Browse = () => {
   const [datas, setDatas] = useState([]);
@@ -119,7 +120,7 @@ const Browse = () => {
       <h3 className="mb-8 text-2xl font-semibold text-gray-700">Lost Items</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {loadingData ? (
-          <p>Loading items...</p>
+          <Loading  />
         ) : (
           datas.map((data) => (
             <MissingItemCard

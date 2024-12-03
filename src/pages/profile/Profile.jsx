@@ -14,8 +14,7 @@ const Profile = () => {
     if (isAuthenticated && token) {
       const loadUserMissingItems = async () => {
         const data = await fetchUserMissingItems(token);
-        const userMissingItems = data.data || [];
-        setUserMissingItems(userMissingItems);
+        setUserMissingItems(data);
       };
       loadUserMissingItems();
     } else {
@@ -23,15 +22,7 @@ const Profile = () => {
     }
   }, []);
 
-  // useEffect(() => {
-  //   const getData = async () => {
-  //     const response = await fetch('https://fakestoreapi.com/products');
-  //     const raw_data = await response.json();
-  //     const data = raw_data.slice(0, 5);
-  //     setData(data);
-  //   };
-  //   getData();
-  // }, [token]);
+  console.log(userMissingItems);
 
   return (
     <>
@@ -77,7 +68,6 @@ const Profile = () => {
                   title={data.title}
                   category={data.category}
                   image={data.image}
-                  count={data.rating.count}
                 />
               ))}
             </div>

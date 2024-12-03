@@ -12,26 +12,56 @@ import {
   PaginationNext,
   PaginationPrevious,
 } from '@/components/ui/pagination';
-import { Link } from 'react-router-dom';
+import Loading from '@/components/Loading';
+import axiosInstance from '@/api/axios';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
-  const [datas, setData] = useState([]);
+  const [datas, setDatas] = useState([]);
+  const [user, setUser] = useState(null);
+  const { token } = useAuth();
+  const [loadingData, setLoadingData] = useState(true);
+
+  const fetchData = async () => {
+    try {
+      const response = await fetch(
+        'https://cari-barengbackend-production.up.railway.app/missings'
+      );
+      const raw_data = await response.json();
+      setDatas(raw_data.data || []);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    } finally {
+      setLoadingData(false);
+    }
+  };
+
+  const fetchUser = async () => {
+    try {
+      const response = await axiosInstance.get('/users', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setUser(response.data.data);
+    } catch (error) {
+      console.error(
+        'Error fetching user:',
+        error.response?.data || error.message
+      );
+    }
+  };
 
   useEffect(() => {
-    const getData = async () => {
-      const response = await fetch('https://fakestoreapi.com/products');
-      const raw_data = await response.json();
-      const data = raw_data.slice(0, 5);
-      setData(data);
-    };
-    getData();
+    fetchData();
+    fetchUser();
   }, []);
+
+  console.log(user)
 
   return (
     <div className="pt-6 px-5 md:px-20 lg:px-40 mt-6">
       {/* Welcome Section */}
       <h2 className="mb-10 text-2xl font-semibold text-700">
-        Welcome back, [User's Name]!
+        Welcome back, {user?.fullname || 'Loading...'}!
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-20">
         <StatsCard title={'Number of Posts'} value={'24'} />
@@ -50,16 +80,19 @@ export default function Dashboard() {
           </a>
         </Button>
       </div>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {datas.map((data) => (
-          <MissingItemCard
-            key={data.id}
-            title={data.title}
-            category={data.category}
-            image={data.image}
-            count={data.rating.count}
-          />
-        ))}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
+        {loadingData ? (
+          <Loading  />
+        ) : (
+          datas.map((data) => (
+            <MissingItemCard
+              key={data.tableId}
+              title={data.title}
+              category={data.category}
+              images={data.images}
+            />
+          ))
+        )}
       </div>
 
       {/* Pagination */}
