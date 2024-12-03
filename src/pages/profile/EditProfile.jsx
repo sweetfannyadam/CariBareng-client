@@ -107,29 +107,27 @@ const EditProfile = () => {
     setUploadStatus(null);
     setUploadProgress(0);
 
-    const file = data.file[0];
-    if (!file) {
-      setUploadStatus({ type: 'error', message: 'No file selected.' });
+    const image = data.file[0];
+    if (!image) {
+      setUploadStatus({ type: 'error', message: 'No image selected.' });
       setIsUploading(false);
       return;
     }
 
     // Create FormData
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('image', image);
 
     try {
-      const response = await uploadProfilePicture(token);
-
-      if (!response.ok) {
-        throw new Error('File upload failed.');
-      }
-
+      const response = await uploadProfilePicture(token, formData);
+      console.log('image', image);
+      console.log('Response:', response);
       setUploadStatus({
         type: 'success',
         message: 'File uploaded successfully!',
       });
     } catch (error) {
+      console.error(error);
       setUploadStatus({
         type: 'error',
         message: error.message || 'File upload failed. Please try again.',

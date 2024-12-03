@@ -36,10 +36,9 @@ export const uploadProfilePicture = async (token, payload) => {
     const response = await axiosInstance.put('/users/profilepicture', payload, {
       headers: {
         Authorization: `Bearer ${token}`,
-        // contentType: 'multipart/form-data',
       },
     });
-    return response.data.data;
+    return response.data;
   } catch (error) {
     console.error('Error uploading profile picture:', error);
   }

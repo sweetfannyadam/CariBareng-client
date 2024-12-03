@@ -5,6 +5,7 @@ import { useAuth } from '@/context/AuthContext';
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUserMissingItems } from '../../utils/user';
+import { Plus } from 'lucide-react';
 
 const Profile = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
@@ -92,6 +93,13 @@ const Profile = () => {
           <h3 className="mb-8 text-2xl font-semibold text-700">
             My Missing Items
           </h3>
+
+          <Link to="/">
+            <Button className="bg-sky-500">
+              <Plus />
+              <span>Add Item</span>
+            </Button>
+          </Link>
 
           {userMissingItems.length === 0 ? (
             <p className="text-center">You have no missing items.</p>
