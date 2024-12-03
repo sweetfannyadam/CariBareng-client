@@ -3,44 +3,42 @@ import { useEffect, useState } from "react";
 import MapComponent from "@/components/MapComponent";
 import { Label } from "@/components/ui/label";
 import Loading from "@/components/Loading";
+import { Link, useParams } from "react-router-dom";
+import { Button } from "@/components/ui/button";
+import FoundThisItem from "@/components/FoundThisItem";
+import { Edit } from "lucide-react";
+import DeleteDrawer from "@/components/DeleteDrawer";
+import { useAuth } from "@/context/AuthContext";
+
 // Adjust the import path as needed
 
 const DetailMissingItemCard = () => {
   const [datas, setData] = useState(null);
-  const [lat, setLat] = useState(null);
-  const [lng, setLng] = useState(null);
-
+  const { id } = useParams();
+  const { user, token } = useAuth();
   
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch("https://fakestoreapi.com/products/1");
-      const raw_data = await response.json();
-      setData(raw_data);
+      const response = await fetch("https://cari-barengbackend-production.up.railway.app/missings/" + id);
+      const dataJson = await response.json();
+      const data = dataJson.data
+      setData(data);
     };
     getData();
-    const exampleMap = {
-      lat: -6.1751,
-      lng: 106.865,
-    };
-    
-    // Add the lat and lng to the state
-    setLat(exampleMap.lat);
-    setLng(exampleMap.lng);
   }, []);
-
-  console.log(datas);
 
   return (
     <div className="px-5 md:px-10 lg:px-10 xl:px-20 2xl:px-60 pt-10 relative">
       {datas ? (
         <div className="flex flex-col lg:flex-row gap-10">
+          {datas.missing_images.length > 0 ? (
           <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-72 2xl:mb-56 rounded-xl shadow-xl">
             <CarouselContent className="h-[500px] lg:w-[350px] lg:h-[250px] xl:w-[500px] xl:h-[400px] flex items-center">
-              {Array.from({ length: 5 }).map((_, index) => (
+              {datas.missing_images.map((_, index) => (
                 <CarouselItem  key={index}>
                     <img
                       className="object-cover object-center"
-                      src={datas.image}
+                      src={_.image_url}
                       alt={datas.title}
                     />
                 </CarouselItem>
@@ -54,17 +52,50 @@ const DetailMissingItemCard = () => {
               </div>
             </div>
           </Carousel>
-          <div className="mt-5 flex-col flex gap-5 text-xl">
-            <p className="font-semibold">Item Categories: {datas.category}</p>
-            <h1 className="text-3xl">{datas.title}</h1>
-            <p className="text-2xl font-bold">Reward: {datas.price}K</p>
-            <p>Phone Number : 08 823 326 0238</p>
-            <p>Date : 24/11/2024</p>
-            <hr className="text-primary" />
-            <p>{datas.description}</p>
+          ) : (
+            <div className="h-[20rem] w-full flex justify-center items-center bg-gray-200 rounded-xl">
+              <p className="text-gray-500">No images available</p>
+            </div>
+          )}
+          <div className="mt-5 flex-col flex gap-5 text-xl w-full">
+            <div className="grid grid-flow-col gap-10">
+              <div className="flex flex-col gap-5">
+                <p className="font-semibold">Item Categories: {datas.category}</p>
+                <h1 className="text-3xl">{datas.title}</h1>
+                <p className="text-2xl font-bold">Reward: {datas.reward}</p>
+                <p>Phone Number : {datas.contact}</p>
+                <p>Date : {datas.date_time}</p>
+                <hr className="text-primary" />
+                <p>{datas.description}</p>
+              </div>
+              <div className="grid gap-5 mt-5">
+                <div className="flex flex-col gap-3 bg-primary text-white p-5 rounded-lg">
+                  <Label>Missing Person : <span className="font-bold text-lg">{datas.users.username}</span></Label>
+                  <Label>City : <span className="font-bold text-lg">{datas.cordinate}</span></Label>
+                  <Label>Reward : <span className="font-bold text-lg">{datas.reward}</span></Label>
+                  <Label>Status : <span className="font-bold text-lg">{datas.status}</span></Label>
+                </div>
+                <div className="w-full grid grid-flow-col content-center gap-5">
+                  {user.id === datas.user_id ? (
+                    <>
+                      <Button
+                        className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg"
+                      >
+                        <Link to="/edit-item">
+                          <Edit className="h-4 w-4" />
+                        </Link>
+                      </Button>
+                      <DeleteDrawer id={datas.id} />
+                    </>
+                  ) : (
+                    <FoundThisItem title={datas.title} token={token} username={datas.users.username} />
+                  )}
+                </div>
+              </div>
+            </div>
             <div className="mt-5 border-2 border-primary p-5 rounded-xl shadow-xl mb-20">
-                <p>Was last seen : <span className="font-bold">Di jalan deket Kali subur</span></p>
-                <MapComponent setLat={setLat} setLng={setLng} />
+                <p className="mb-2">Was last seen : <span className="font-bold">{datas.last_viewed}</span></p>
+                <MapComponent lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
             </div>
           </div>
         </div>
