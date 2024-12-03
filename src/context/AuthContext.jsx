@@ -10,6 +10,7 @@ import {
   clearTokens,
 } from '@/utils/authentication';
 import { fetchUser } from '@/utils/user';
+import { toast } from '@/hooks/use-toast';
 
 const AuthContext = createContext();
 
@@ -18,15 +19,38 @@ export const AuthProvider = ({ children }) => {
   const [token, setToken] = useState(
     localStorage.getItem('accessToken') || null
   );
+  const [isAuthenticated, setAuthenticated] = useState(!!token);
   const [isLoading, setIsLoading] = useState(true);
 
-  const isAuthenticated = !!token;
+  useEffect(() => {
+    const initAuth = async () => {
+      const token = getAccessToken();
+      if (token && isTokenValid(token)) {
+        try {
+          const userData = await fetchUser(token);
+          setUser(userData);
+          setAuthenticated(true);
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          setAuthenticated(false);
+          logout();
+        }
+      } else {
+        setAuthenticated(false);
+      }
+
+      setIsLoading(false);
+    };
+
+    initAuth();
+  }, [token]);
 
   // Authentication
   const login = (newToken, refreshToken) => {
     setToken(newToken);
     setAccessToken(newToken);
     setRefreshToken(refreshToken);
+    setAuthenticated(true);
 
     const decodedToken = decodeToken(newToken);
     setTokenExpiration(decodedToken.exp);
@@ -37,38 +61,8 @@ export const AuthProvider = ({ children }) => {
     setToken(null);
     clearTokens();
     localStorage.removeItem('access_token_expiration');
+    setAuthenticated(false);
   };
-
-  // User Data
-  const loadUser = async (token) => {
-    const userData = await fetchUser(token);
-    console.log('Auth loadUser:', userData);
-    if (userData) {
-      setUser(userData);
-    }
-  };
-
-  useEffect(() => {
-    const checkTokenExpiry = async () => {
-      const token = getAccessToken();
-
-      if (token) {
-        const tokenValidation = isTokenValid(token);
-        if (tokenValidation) {
-          await loadUser(token);
-          return;
-        }
-      } else {
-        setUser(null);
-      }
-
-      console.log('isAuthenticated in AuthContext:', isAuthenticated);
-
-      setIsLoading(false);
-    };
-
-    checkTokenExpiry();
-  }, [token]);
 
   return (
     <AuthContext.Provider

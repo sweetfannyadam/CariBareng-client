@@ -1,10 +1,15 @@
 import axiosInstance from '../api/axios';
+import { refreshToken } from './authentication';
 
 export const fetchUser = async (token) => {
   try {
     const response = await axiosInstance.get('/users', {
       headers: { Authorization: `Bearer ${token}` },
     });
+    if (!response.data.data) {
+      await refreshToken(token);
+      console.log('Refreshed token');
+    }
 
     return response.data.data;
   } catch (error) {
@@ -26,10 +31,13 @@ export const updateUser = async (token, payload) => {
   }
 };
 
-export const uploadProfilePicture = async (token, image) => {
+export const uploadProfilePicture = async (token, payload) => {
   try {
-    const response = await axiosInstance.post('/users/profile-picture', image, {
-      headers: { Authorization: `Bearer ${token}` },
+    const response = await axiosInstance.put('/users/profilepicture', payload, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        // contentType: 'multipart/form-data',
+      },
     });
     return response.data.data;
   } catch (error) {
@@ -48,6 +56,3 @@ export const fetchUserMissingItems = async (token) => {
     console.error('Error fetching total posts:', error);
   }
 };
-
-const data = await fetchUser();
-console.log('fetchUser data:', data);

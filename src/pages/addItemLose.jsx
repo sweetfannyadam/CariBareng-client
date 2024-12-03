@@ -58,7 +58,7 @@ const AddItemLose = () => {
           lat: String(location.lat), 
           lng: String(location.lng),
         },
-        status: 'pending',
+        status: 'missing',
       };
 
       console.log(formData.image)

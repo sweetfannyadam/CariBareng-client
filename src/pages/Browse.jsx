@@ -75,6 +75,9 @@ const Browse = () => {
     fetchLocations();
   }, []);
 
+  console.log(datas);
+
+
   return (
     <div className="pt-10 px-5 md:px-20 xl:px-40">
       {/* Search Bar */}
@@ -125,9 +128,11 @@ const Browse = () => {
           datas.map((data) => (
             <MissingItemCard
               key={data.tableId}
+              id={data.tableId}
               title={data.title}
               category={data.category}
               images={data.images}
+              status={data.status}
             />
           ))
         )}

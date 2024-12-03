@@ -55,7 +55,7 @@ export default function Dashboard() {
     fetchUser();
   }, []);
 
-  console.log(user)
+  console.log(user);
 
   return (
     <div className="pt-6 px-5 md:px-20 lg:px-40 mt-6">
@@ -87,9 +87,11 @@ export default function Dashboard() {
           datas.map((data) => (
             <MissingItemCard
               key={data.tableId}
+              id={data.tableId}
               title={data.title}
               category={data.category}
               images={data.images}
+              status={data.status}
             />
           ))
         )}

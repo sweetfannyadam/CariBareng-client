@@ -47,7 +47,7 @@ function App() {
           }
         />
         <Route
-          path="/detail/:id"
+          path="/missing-items/:id"
           element={
             <Layout withHeader={true}>
               <DetailMissingItemCard />

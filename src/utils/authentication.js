@@ -59,12 +59,13 @@ export const refreshToken = async () => {
   }
 
   try {
-    const response = await axiosInstance.post('/token', {});
+    const response = await axiosInstance.post('/token', { refreshToken });
     const { accessToken } = response.data.data;
     setAccessToken(accessToken);
     return accessToken;
   } catch (error) {
     console.error('Error refreshing token:', error);
+    clearTokens();
     throw new Error('Failed to refresh token');
   }
 };
