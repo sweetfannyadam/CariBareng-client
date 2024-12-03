@@ -5,28 +5,26 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import InteractiveMap from '@/components/InteractiveMapTracker';
+import { createMissingItem } from '@/utils/missings'; // Pastikan path sesuai
+import { useAuth } from '@/context/AuthContext';
 
 const AddItemLose = () => {
   const [formData, setFormData] = useState({
-    name: '',
+    title: '',
     category: '',
     date_time: '',
     last_viewed: '',
     description: '',
-    images: ['', '', ''],
+    image: ['', '', ''],
     contact: '',
     reward: '',
   });
   const [errors, setErrors] = useState({});
   const [location, setLocation] = useState(null);
+  const [isSubmitting, setIsSubmitting] = useState(false); 
+  const { token } = useAuth();
 
-  const categories = [
-    'Electronics',
-    'Clothing',
-    'Documents',
-    'Accessories',
-    'Others',
-  ];
+  const categories = ['Electronics', 'Clothing', 'Documents', 'Accessories', 'Others'];
 
   const validateForm = () => {
     const newErrors = {};
@@ -41,23 +39,52 @@ const AddItemLose = () => {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!validateForm()) return;
-    console.log('Form data:', { ...formData, location });
+
+    setIsSubmitting(true);
+    try {
+      // Data untuk createMissingItem
+      const payload = {
+        title: formData.title,
+        category: formData.category,
+        date_time: formData.date_time,
+        last_viewed: formData.last_viewed,
+        description: formData.description,
+        images: formData.image,
+        contact: formData.contact,
+        reward: formData.reward,
+        location: {
+          lat: String(location.lat), 
+          lng: String(location.lng),
+        },
+        status: 'missing',
+      };
+
+      console.log(formData.image)
+
+      const createdItem = await createMissingItem(payload, token);
+      console.log('Item created:', createdItem);
+    } catch (error) {
+      console.error('Error during submission:', error);
+      alert('Terjadi kesalahan saat memposting item.');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
-    <div className="flex items-center justify-center min-h-screen mt-10">
+    <div className="flex items-center justify-center min-h-screen lg:mt-10 transition-all ease-in-out">
       <Card className="w-[1000px]">
         <CardHeader>
           <CardTitle>Post Your Lost Item</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid gap-2">
-            <div className='grid md:grid-cols-3 gap-5'>
-              {/* Name Item */}
+            <div className="grid md:grid-cols-3 gap-5">
+              {/* Title */}
               <div>
-                <Label htmlFor="title">title Item</Label>
+                <Label htmlFor="title">Title Item</Label>
                 <Input
                   id="title"
                   placeholder="Title of your item"
@@ -127,16 +154,16 @@ const AddItemLose = () => {
 
             {/* Images */}
             <div className="grid grid-cols-3 gap-5">
-              {formData.images.map((image, index) => (
+              {formData.image.map((image, index) => (
                 <div key={index}>
                   <Label htmlFor={`image-${index}`}>Image {index + 1}</Label>
                   <Input
                     type="file"
                     id={`image-${index}`}
                     onChange={(e) => {
-                      const newImages = [...formData.images];
-                      newImages[index] = e.target.files[0];
-                      setFormData({ ...formData, images: newImages });
+                      const newImage = [...formData.image];
+                      newImage[index] = e.target.files[0];
+                      setFormData({ ...formData, image: newImage });
                     }}
                   />
                 </div>
@@ -175,7 +202,9 @@ const AddItemLose = () => {
           </div>
         </CardContent>
         <CardFooter className="justify-end">
-          <Button onClick={handleSubmit}>Post Item</Button>
+          <Button onClick={handleSubmit} disabled={isSubmitting}>
+            {isSubmitting ? 'Posting...' : 'Post Item'}
+          </Button>
         </CardFooter>
       </Card>
     </div>

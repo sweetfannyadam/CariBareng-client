@@ -17,7 +17,7 @@ export function DeleteDrawer() {
     <Drawer>
       <DrawerTrigger>
         <Button
-          className="text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
+          className="bg-primary-foreground text-primary hover:bg-primary border-2 border-primary-foreground py-[1.13rem]"
           variant="ghost"
           size="sm"
         >
