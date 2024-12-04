@@ -40,7 +40,7 @@ const Profile = () => {
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
 
-  console.log(userMissingItems)
+  console.log(userMissingItems);
 
   return (
     <>
@@ -73,7 +73,7 @@ const Profile = () => {
             My Missing Items
           </h3>
           <div className='flex justify-end mb-5'>
-            <Link to="/">
+            <Link to="/post-item">
               <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
                 <Plus />
                 <span>Add Item</span>
@@ -82,7 +82,7 @@ const Profile = () => {
           </div>
 
           {userMissingItems.length === 0 ? (
-            <p className="text-center">You have no missing items.</p>
+            <p className="text-center m-16">You have no missing items.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userMissingItems.map((data) => (

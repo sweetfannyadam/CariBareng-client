@@ -148,7 +148,11 @@ const EditProfile = () => {
             src="../profile.jpg"
             alt="foto [username]"
           />
-          <form onSubmit={handleSubmit(onUpload)} className="space-y-6">
+          <Form
+            {...uploadProfilePictureForm}
+            onSubmit={handleSubmit(onUpload)}
+            className="space-y-6"
+          >
             <div>
               <Label
                 htmlFor="file"
@@ -201,7 +205,7 @@ const EditProfile = () => {
                 )}
               </Button>
             </div>
-          </form>
+          </Form>
 
           {isUploading && (
             <div className="mt-4">
@@ -234,6 +238,7 @@ const EditProfile = () => {
             </Alert>
           )}
         </div>
+
         <Form {...editProfileForm}>
           <form
             onSubmit={editProfileForm.handleSubmit(onSubmit)}
@@ -318,7 +323,11 @@ const EditProfile = () => {
 
             <CardFooter className="justify-end">
               <Button type="submit" disabled={isLoading}>
-                {isLoading ? 'Updating...' : 'Update Profile'}
+                {isLoading ? (
+                  <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  'Update Profile'
+                )}
               </Button>
             </CardFooter>
           </form>
