@@ -16,7 +16,6 @@ const Header = () => {
       <nav className="flex justify-between items-center text-base md:text-xl font-bold">
         <NavLinks />
         {/* {isLoggedIn ? <UserMenu onLogout={handleLogout} /> : <AuthButtons />} */}
-
         {pathname !== '/' && isLoggedIn ? <UserMenu /> : <AuthButtons />}
       </nav>
     </header>

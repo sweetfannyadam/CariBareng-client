@@ -50,14 +50,14 @@ const Profile = () => {
             id="profile_img"
             className="rounded-full border-4 w-40 h-40 md:w-60 md:h-60 overflow-hidden"
           >
-            <img src="profile.jpg" alt="User Profile" />
+            <img src="./profile.jpg" alt="User Profile" />
           </div>
           <div id="profile_info" className="text-2xl flex flex-col gap-3">
             <p>{user?.fullname || 'Loading...'}</p>
             <p>{user?.gmail || 'Loading...'}</p>
             <p>{user?.about_me || 'Ceritakan tentang Anda'}</p>
             <Link to="/profile/edit">
-              <Button className="bg-sky-500">Edit Profile</Button>
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">Edit Profile</Button>
             </Link>
           </div>
         </div>
@@ -72,13 +72,14 @@ const Profile = () => {
           <h3 className="mb-8 text-2xl font-semibold text-700">
             My Missing Items
           </h3>
-
-          <Link to="/">
-            <Button className="bg-sky-500">
-              <Plus />
-              <span>Add Item</span>
-            </Button>
-          </Link>
+          <div className='flex justify-end mb-5'>
+            <Link to="/">
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                <Plus />
+                <span>Add Item</span>
+              </Button>
+            </Link>
+          </div>
 
           {userMissingItems.length === 0 ? (
             <p className="text-center">You have no missing items.</p>

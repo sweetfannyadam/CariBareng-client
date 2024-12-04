@@ -8,7 +8,7 @@ export const createFoundItem = async (payload, token, username) => {
       return response.data.data;
     } catch (error) {
       console.error(
-        'Error creating missing item:',
+        'Error creating notification item:',
         error.response?.data || error.message
       );
     }

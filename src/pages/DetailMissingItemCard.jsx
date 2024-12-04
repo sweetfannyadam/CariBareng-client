@@ -63,7 +63,6 @@ const DetailMissingItemCard = () => {
                 <p className="font-semibold">Item Categories: {datas.category}</p>
                 <h1 className="text-3xl">{datas.title}</h1>
                 <p className="text-2xl font-bold">Reward: {datas.reward}</p>
-                <p>Phone Number : {datas.contact}</p>
                 <p>Date : {datas.date_time}</p>
                 <hr className="text-primary" />
                 <p>{datas.description}</p>
