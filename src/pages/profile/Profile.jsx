@@ -40,7 +40,7 @@ const Profile = () => {
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
 
-  console.log(userMissingItems)
+  console.log(userMissingItems);
 
   return (
     <>
@@ -73,15 +73,15 @@ const Profile = () => {
             My Missing Items
           </h3>
 
-          <Link to="/">
-            <Button className="bg-sky-500">
+          <Link to="/post-item">
+            <Button className="bg-sky-500 mb-4">
               <Plus />
               <span>Add Item</span>
             </Button>
           </Link>
 
           {userMissingItems.length === 0 ? (
-            <p className="text-center">You have no missing items.</p>
+            <p className="text-center m-16">You have no missing items.</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {userMissingItems.map((data) => (

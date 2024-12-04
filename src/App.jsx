@@ -65,7 +65,7 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/post-item"
+          path="/post-item"
           element={
             <ProtectedRoute>
               <Layout>
