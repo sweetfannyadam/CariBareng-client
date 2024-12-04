@@ -5,9 +5,9 @@ import { Label } from './ui/label'
 import { Input } from './ui/input'
 import { Textarea } from './ui/textarea'
 import { useState } from 'react'
-import { createFoundItem } from '@/utils/foundItem'
+import { createNotification } from '@/utils/notification'
 
-const FoundThisItem = ({ title, token, username }) => {
+const FoundThisItem = ({ title, token, target }) => {
     const [formData, setFormData] = useState({
         title: title,
         location: '',
@@ -39,7 +39,7 @@ const FoundThisItem = ({ title, token, username }) => {
                 description: formData.description,
                 image: formData.image,
             }
-            const createdItem = await createFoundItem(payload, token, username);
+            const createdItem = await createNotification(payload, token, target);
             console.log('Item created:', createdItem);
         } catch (error) {
             console.error('Error during submission:', error);
