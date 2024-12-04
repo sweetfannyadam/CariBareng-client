@@ -1,74 +1,123 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import InteractiveMap from '@/components/InteractiveMapTracker';
 import { createMissingItem } from '@/utils/missings'; // Pastikan path sesuai
 import { useAuth } from '@/context/AuthContext';
+import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Progress } from '@/components/ui/progress';
+import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { addMissingItemFormSchema } from '@/schema/AddMissingItemSchema';
+import { useNavigate } from 'react-router-dom';
+import { useToast } from '@/hooks/use-toast';
 
 const AddItemLose = () => {
-  const [formData, setFormData] = useState({
-    title: '',
-    category: '',
-    date_time: '',
-    last_viewed: '',
-    description: '',
-    image: ['', '', ''],
-    contact: '',
-    reward: '',
-  });
-  const [errors, setErrors] = useState({});
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm();
+
   const [location, setLocation] = useState(null);
-  const [isSubmitting, setIsSubmitting] = useState(false); 
-  const { token } = useAuth();
+  const [isUploading, setIsUploading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState(0);
+  const [isLoading, setIsLoading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const categories = ['Electronics', 'Clothing', 'Documents', 'Accessories', 'Others'];
+  const navigate = useNavigate();
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.title) newErrors.title = 'Title is required.';
-    if (!formData.category) newErrors.category = 'Category is required.';
-    if (!formData.date_time) newErrors.date_time = 'Date and time are required.';
-    if (!formData.last_viewed) newErrors.last_viewed = 'Last viewed location is required.';
-    if (!formData.description) newErrors.description = 'Description is required.';
-    if (!formData.contact) newErrors.contact = 'Contact is required.';
-    if (!location) newErrors.location = 'Location must be selected.';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const { toast } = useToast();
+  const { user, token, logout, isAuthenticated } = useAuth();
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
+  const addMissingItemForm = useForm({
+    resolver: zodResolver(addMissingItemFormSchema),
+    defaultValues: {
+      title: '',
+      category: '',
+      date_time: '',
+      last_viewed: '',
+      description: '',
+      image: ['', '', ''],
+      contact: '',
+      reward: '',
+    },
+  });
 
+  const categories = [
+    'Electronics',
+    'Clothing',
+    'Documents',
+    'Accessories',
+    'Others',
+  ];
+
+  const onSubmit = async (values) => {
+    setIsLoading(true);
     setIsSubmitting(true);
+    setIsUploading(true);
+    setUploadStatus(null);
+    setUploadProgress(0);
+
+    const images = data.file[0];
+    if (!images) {
+      setUploadStatus({ type: 'error', message: 'No images selected.' });
+      setIsUploading(false);
+      return;
+    }
+
+    // Create FormData
+    const formData = new FormData();
+    for (let i = 0; i < images.length; i++) {
+      formData.append('images', images[i]);
+    }
+    formData.append('images', images);
+
     try {
-      // Data untuk createMissingItem
       const payload = {
-        title: formData.title,
-        category: formData.category,
-        date_time: formData.date_time,
-        last_viewed: formData.last_viewed,
-        description: formData.description,
-        images: formData.image,
-        contact: formData.contact,
-        reward: formData.reward,
+        title: values.title,
+        category: values.category,
+        date_time: values.date_time,
+        last_viewed: values.last_viewed,
+        description: values.description,
+        images: formData,
+        contact: values.contact,
+        reward: values.reward,
         location: {
-          lat: String(location.lat), 
+          lat: String(location.lat),
           lng: String(location.lng),
         },
         status: 'missing',
       };
 
-      console.log(formData.image)
+      const response = await createMissingItem(token, payload);
+      console.log('image', images);
+      console.log('Response:', response);
+      setIsLoading(false);
+      setIsSubmitting(false);
+      setIsUploading(false);
+      setUploadStatus({
+        type: 'success',
+        message: 'File uploaded successfully!',
+      });
 
-      const createdItem = await createMissingItem(payload, token);
-      console.log('Item created:', createdItem);
+      reset();
+      navigate('/profile');
     } catch (error) {
-      console.error('Error during submission:', error);
-      alert('Terjadi kesalahan saat memposting item.');
-    } finally {
+      console.error(error);
+      setIsLoading(false);
       setIsSubmitting(false);
     }
   };
@@ -86,21 +135,35 @@ const AddItemLose = () => {
               <div>
                 <Label htmlFor="title">Title Item</Label>
                 <Input
+                  name="title"
                   id="title"
                   placeholder="Title of your item"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                  value={addMissingItemForm.title}
+                  onChange={(e) =>
+                    setFormData({
+                      ...addMissingItemForm,
+                      title: e.target.value,
+                    })
+                  }
                 />
-                {errors.title && <span className="text-red-500">{errors.title}</span>}
+                {errors.title && (
+                  <span className="text-red-500">{errors.title}</span>
+                )}
               </div>
 
               {/* Category */}
               <div>
                 <Label htmlFor="category">Category</Label>
                 <select
+                  name="category"
                   id="category"
-                  value={formData.category}
-                  onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+                  value={addMissingItemForm.category}
+                  onChange={(e) =>
+                    setFormData({
+                      ...addMissingItemForm,
+                      category: e.target.value,
+                    })
+                  }
                   className="border border-gray-300 rounded-md p-2 w-full"
                 >
                   <option value="" disabled>
@@ -112,19 +175,29 @@ const AddItemLose = () => {
                     </option>
                   ))}
                 </select>
-                {errors.category && <span className="text-red-500">{errors.category}</span>}
+                {errors.category && (
+                  <span className="text-red-500">{errors.category}</span>
+                )}
               </div>
 
               {/* Date and Time */}
               <div>
                 <Label htmlFor="date_time">Date and Time</Label>
                 <Input
+                  name="date_time"
                   type="datetime-local"
                   id="date_time"
-                  value={formData.date_time}
-                  onChange={(e) => setFormData({ ...formData, date_time: e.target.value })}
+                  value={addMissingItemForm.date_time}
+                  onChange={(e) =>
+                    setFormData({
+                      ...addMissingItemForm,
+                      date_time: e.target.value,
+                    })
+                  }
                 />
-                {errors.date_time && <span className="text-red-500">{errors.date_time}</span>}
+                {errors.date_time && (
+                  <span className="text-red-500">{errors.date_time}</span>
+                )}
               </div>
             </div>
 
@@ -132,28 +205,135 @@ const AddItemLose = () => {
             <div>
               <Label htmlFor="last_viewed">Last Viewed Location</Label>
               <Input
+                name="last_viewed"
                 id="last_viewed"
                 placeholder="Enter your last viewed location"
-                value={formData.last_viewed}
-                onChange={(e) => setFormData({ ...formData, last_viewed: e.target.value })}
+                value={addMissingItemForm.last_viewed}
+                onChange={(e) =>
+                  setFormData({
+                    ...addMissingItemForm,
+                    last_viewed: e.target.value,
+                  })
+                }
               />
-              {errors.last_viewed && <span className="text-red-500">{errors.last_viewed}</span>}
+              {errors.last_viewed && (
+                <span className="text-red-500">{errors.last_viewed}</span>
+              )}
             </div>
 
             {/* Description */}
             <div>
               <Label htmlFor="description">Item Description</Label>
               <Textarea
+                name="description"
                 id="description"
                 placeholder="Enter your item description"
-                value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                value={addMissingItemForm.description}
+                onChange={(e) =>
+                  setFormData({
+                    ...addMissingItemForm,
+                    description: e.target.value,
+                  })
+                }
               />
-              {errors.description && <span className="text-red-500">{errors.description}</span>}
+              {errors.description && (
+                <span className="text-red-500">{errors.description}</span>
+              )}
             </div>
 
             {/* Images */}
-            <div className="grid grid-cols-3 gap-5">
+            <div className="flex flex-col">
+              <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
+                <div>
+                  <Label
+                    htmlFor="file"
+                    className="text-sm font-medium"
+                    style={{ color: '#2C3E50' }}
+                  >
+                    Choose a file
+                  </Label>
+                  <Input
+                    name="file"
+                    id="file"
+                    type="file"
+                    {...register('file', {
+                      required: 'Please select a file',
+                      validate: {
+                        lessThan10MB: (files) =>
+                          files[0]?.size < 10000000 || 'Max 10MB',
+                        acceptedFormats: (files) =>
+                          [
+                            'image/jpeg',
+                            'image/png',
+                            'application/pdf',
+                          ].includes(files[0]?.type) ||
+                          'Only JPEG, PNG, or PDF files are allowed',
+                      },
+                    })}
+                    className="mt-1"
+                    disabled={isUploading}
+                  />
+                  {errors.file && (
+                    <p className="mt-1 text-sm" style={{ color: '#e74c3c' }}>
+                      {errors.file.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="flex justify-end">
+                  <Button
+                    type="submit"
+                    disabled={isUploading}
+                    style={{
+                      backgroundColor: '#89A8B2',
+                      color: 'white',
+                      '&:hover': { backgroundColor: '#5D7A8C' },
+                    }}
+                  >
+                    {isUploading ? (
+                      <>
+                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                        Uploading
+                      </>
+                    ) : (
+                      'Upload'
+                    )}
+                  </Button>
+                </div>
+              </form>
+
+              {isUploading && (
+                <div className="mt-4">
+                  <Progress value={uploadProgress} className="w-full" />
+                  <p
+                    className="text-sm text-center mt-2"
+                    style={{ color: '#2C3E50' }}
+                  >
+                    Uploading: {uploadProgress}%
+                  </p>
+                </div>
+              )}
+
+              {uploadStatus && (
+                <Alert
+                  className="mt-4"
+                  variant={
+                    uploadStatus.type === 'success' ? 'default' : 'destructive'
+                  }
+                >
+                  {uploadStatus.type === 'success' ? (
+                    <CheckCircle2 className="h-4 w-4" />
+                  ) : (
+                    <AlertCircle className="h-4 w-4" />
+                  )}
+                  <AlertTitle>
+                    {uploadStatus.type === 'success' ? 'Success' : 'Error'}
+                  </AlertTitle>
+                  <AlertDescription>{uploadStatus.message}</AlertDescription>
+                </Alert>
+              )}
+            </div>
+            {/* <div className="grid grid-cols-3 gap-5">
               {formData.image.map((image, index) => (
                 <div key={index}>
                   <Label htmlFor={`image-${index}`}>Image {index + 1}</Label>
@@ -168,7 +348,7 @@ const AddItemLose = () => {
                   />
                 </div>
               ))}
-            </div>
+            </div> */}
 
             {/* Contact and Reward */}
             <div className="grid md:grid-cols-3 gap-5">
@@ -177,18 +357,27 @@ const AddItemLose = () => {
                 <Input
                   id="contact"
                   placeholder="Input your contact"
-                  value={formData.contact}
-                  onChange={(e) => setFormData({ ...formData, contact: e.target.value })}
+                  value={addMissingItemForm.contact}
+                  onChange={(e) =>
+                    setFormData({
+                      ...addMissingItemForm,
+                      contact: e.target.value,
+                    })
+                  }
                 />
-                {errors.contact && <span className="text-red-500">{errors.contact}</span>}
+                {errors.contact && (
+                  <span className="text-red-500">{errors.contact}</span>
+                )}
               </div>
               <div>
                 <Label htmlFor="reward">Reward (Optional)</Label>
                 <Input
                   id="reward"
                   placeholder="Enter reward (optional)"
-                  value={formData.reward}
-                  onChange={(e) => setFormData({ ...formData, reward: e.target.value })}
+                  value={addMissingItemForm.reward}
+                  onChange={(e) =>
+                    setFormData({ ...formData, reward: e.target.value })
+                  }
                 />
               </div>
             </div>
@@ -197,13 +386,22 @@ const AddItemLose = () => {
             <div className="rounded-lg">
               <Label className="mb-2">Pick Location on Map:</Label>
               <InteractiveMap location={location} setLocation={setLocation} />
-              {errors.location && <span className="text-red-500">{errors.location}</span>}
+              {errors.location && (
+                <span className="text-red-500">{errors.location}</span>
+              )}
             </div>
           </div>
         </CardContent>
         <CardFooter className="justify-end">
-          <Button onClick={handleSubmit} disabled={isSubmitting}>
-            {isSubmitting ? 'Posting...' : 'Post Item'}
+          <Button onClick={onSubmit} disabled={isSubmitting}>
+            {isSubmitting ? (
+              <Button disabled>
+                <Loader2 className="animate-spin" />
+                Please wait
+              </Button>
+            ) : (
+              'Post Item'
+            )}
           </Button>
         </CardFooter>
       </Card>
