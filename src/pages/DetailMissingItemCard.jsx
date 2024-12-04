@@ -58,7 +58,7 @@ const DetailMissingItemCard = () => {
             </div>
           )}
           <div className="mt-5 flex-col flex gap-5 text-xl w-full">
-            <div className="grid grid-flow-col gap-10">
+            <div className="grid md:grid-flow-col gap-10">
               <div className="flex flex-col gap-5">
                 <p className="font-semibold">Item Categories: {datas.category}</p>
                 <h1 className="text-3xl">{datas.title}</h1>
@@ -87,7 +87,7 @@ const DetailMissingItemCard = () => {
                       <DeleteDrawer id={datas.id} />
                     </>
                   ) : (
-                    <FoundThisItem title={datas.title} token={token} username={datas.users.username} />
+                    <FoundThisItem title={datas.title} token={token} target={datas.users.username} />
                   )}
                 </div>
               </div>

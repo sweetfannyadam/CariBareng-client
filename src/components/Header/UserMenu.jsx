@@ -30,7 +30,7 @@ const UserMenu = () => {
   };
 
   return (
-    <ul className="flex justify-between gap-5">
+    <ul className="flex justify-between items-center gap-5">
       <li>
         <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
           <DropdownMenu>
