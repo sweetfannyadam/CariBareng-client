@@ -39,7 +39,7 @@ const Browse = () => {
   const fetchData = async () => {
     try {
       const response = await fetch(
-        "https://cari-barengbackend-production.up.railway.app/missings"
+        "https://cari-barengbackend-production.up.railway.app/missings?status=missing"
       );
       const raw_data = await response.json();
       setDatas(raw_data.data || []);
@@ -89,7 +89,7 @@ const Browse = () => {
       const filteredData = allData.filter(
         (item) =>
           (!searchQuery || item.title.toLowerCase().includes(searchQuery.toLowerCase())) &&
-          (!selectedLocation || item.last_viewed === selectedLocation) &&
+          (!selectedLocation || item.location.toLowerCase().includes(selectedLocation.toLowerCase())) &&
           (!selectedCategory || item.category === selectedCategory)
       );
 
