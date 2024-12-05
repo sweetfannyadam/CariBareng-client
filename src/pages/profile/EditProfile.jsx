@@ -144,27 +144,11 @@ const EditProfile = () => {
     <div className="flex justify-center items-center p-5 lg:p-10 xl:p-20 border-4 border-primary rounded-2xl my-20 mx-5 lg:mx-20 xl:mx-40 2xl:mx-60 bg-slate-100 shadow-2xl">
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="flex flex-col">
-<<<<<<< HEAD
-          <div
-            id="profile-picture"
-            className="flex justify-center items-center align-center mt-5 mb-10"
-          >
-            <Avatar
-              src={user?.profile_picture}
-              alt="avatar"
-              size="xxl"
-              withBorder={true}
-              className=" border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
-            />
-          </div>
-
-=======
           <img
             className="border-2 border-primary mb-5"
             src="../profile.jpg"
             alt="foto [username]"
           />
->>>>>>> 87e5bd790acfe9ea3fb158050f4dbde5020d0cc3
           <Form
             {...uploadProfilePictureForm}
             onSubmit={handleSubmit(onUpload)}
