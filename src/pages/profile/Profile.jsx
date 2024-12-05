@@ -45,7 +45,10 @@ const Profile = () => {
       <section className="flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10">
         <div className="flex flex-col md:flex-row items-center gap-10">
           <Avatar
-            src={user?.profile_picture}
+            src={
+              user?.profile_picture ||
+              `https://avatar.iran.liara.run/username?username=${user.fullname}]`
+            }
             alt="avatar"
             size="xxl"
             withBorder={true}
@@ -61,11 +64,6 @@ const Profile = () => {
               </Button>
             </Link>
           </div>
-        </div>
-        <div className="flex gap-4">
-          <StatsCard title="Number of Posts" value={userMissingItems.length} />
-          <StatsCard title="Items Found" value="1" />
-          <StatsCard title="Items Lost" value="2" />
         </div>
       </section>
       <section>

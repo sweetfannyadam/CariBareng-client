@@ -119,12 +119,7 @@ const DetailMissingItemCard = () => {
                       <DeleteDrawer id={datas.id} />
                     </>
                   ) : (
-                    <FoundThisItem
-                      missingItem={datas}
-                      title={datas.title}
-                      token={token}
-                      target={datas.users.username}
-                    />
+                    <FoundThisItem missingItem={datas} token={token} />
                   )}
                 </div>
               </div>

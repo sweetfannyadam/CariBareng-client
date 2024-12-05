@@ -41,14 +41,18 @@ export function NotificationModal({ notification, onClose }) {
       // Check if details are loaded
       const payload = {
         toggle: 'true',
-        tableId: 'missing-tLU6J1cg-X',
+        tableId: `${notificationDetails.notification.missing_id}`,
       };
       try {
+        console.log('Payload:', payload);
+
         const response = await axiosInstance.post(`/approve`, payload, {
           headers: {
-            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItS0pNdEhlejBmWSIsInVzZXJuYW1lIjoiZWxpemFiZXRoMTIwNyIsImlhdCI6MTczMzM4MTYwNiwiZXhwIjoxNzMzNDY4MDA2fQ.oc6FBxUtgnKFWejsIMs0bpMUjrfISp3XX8uhK00ypPQ`,
+            Authorization: `Bearer ${token}`,
           },
         });
+
+        console.log('Response:', response);
         toast({
           title: 'Notification Approved',
           description: 'The notification has been approved successfully',
@@ -151,6 +155,7 @@ export function NotificationModal({ notification, onClose }) {
             onClick={() => {
               console.log('Approve button clicked');
               approveNotification();
+              onClose();
             }}
             className="mb-2 bg-[#89A8B2] hover:bg-[#5D7A8C] text-white"
           >
