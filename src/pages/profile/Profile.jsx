@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUserMissingItems } from '../../utils/user';
 import { Plus } from 'lucide-react';
+import { Avatar } from '@material-tailwind/react';
 
 const Profile = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
@@ -46,12 +47,13 @@ const Profile = () => {
     <>
       <section className="flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10">
         <div className="flex flex-col md:flex-row items-center gap-10">
-          <div
-            id="profile_img"
-            className="rounded-full border-4 w-40 h-40 md:w-60 md:h-60 overflow-hidden"
-          >
-            <img src="profile.jpg" alt="User Profile" />
-          </div>
+          <Avatar
+            src={user?.profile_picture}
+            alt="avatar"
+            size="xxl"
+            withBorder={true}
+            className="border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
+          />
           <div id="profile_info" className="text-2xl flex flex-col gap-3">
             <p>{user?.fullname || 'Loading...'}</p>
             <p>{user?.gmail || 'Loading...'}</p>

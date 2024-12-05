@@ -18,6 +18,8 @@ import { CardDemo } from '../Notifications';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
+import { Switch } from '../ui/switch';
+import { Label } from '../ui/label';
 
 const UserMenu = () => {
   const { logout } = useAuth();
@@ -31,8 +33,10 @@ const UserMenu = () => {
 
   return (
     <ul className="flex justify-between gap-5">
-      <li>
+      {/* <li>
         <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
+          <div className={isDarkMode ? 'dark' : ''}>{children}</div>
+
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button
@@ -64,7 +68,7 @@ const UserMenu = () => {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-      </li>
+      </li> */}
       <li>
         <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
           <DropdownMenu>

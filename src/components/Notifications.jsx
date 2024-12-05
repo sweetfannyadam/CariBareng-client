@@ -14,11 +14,13 @@ import axiosInstance from '@/api/axios';
 import { useAuth } from '@/context/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { fetchAllNotifications } from '@/utils/notification';
+import { formatTimestamp } from '@/utils/formatTimestamp';
 
 export function CardDemo({ className, ...props }) {
   const { token, user, isAuthenticated } = useAuth();
   const { toast } = useToast();
   const [notifications, setNotifications] = useState([]);
+  const [timestamp, setTimestamp] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ export function CardDemo({ className, ...props }) {
       }
     };
     fetchNotifications();
-  }, [isAuthenticated, token, toast]);
+  }, [isAuthenticated, token, timestamp, toast]);
 
   const markAllAsRead = () => {
     setNotifications([]);
@@ -51,6 +53,8 @@ export function CardDemo({ className, ...props }) {
       variant: 'default',
     });
   };
+
+  console.log('Notifications:', notifications); // Log the notifications
 
   return (
     <Card className={cn('border-none mr-20 w-full', className)} {...props}>
@@ -71,32 +75,31 @@ export function CardDemo({ className, ...props }) {
             {notifications.map((notification) => (
               <div
                 key={notification.id}
-                className="mb-4 grid grid-cols-[25px_1fr] items-start pb-4 last:mb-0 last:pb-0"
+                className="mb-4 flex flex-col items-start pb-4 last:mb-0 last:pb-0"
               >
                 <span className="flex h-2 w-2 translate-y-1 rounded-full bg-sky-500" />
                 <div className="space-y-1">
-                  <p className="text-sm font-medium leading-none">
-                    {notification.title}
+                  <p className="text-sm font-medium leading-none mb-2">
+                    {notification.sender} found your item!
                   </p>
-                  <p className="text-sm text-muted-foreground">
-                    {notification.sender} -{' '}
-                    {new Date(notification.date).toLocaleString()}
+                  <p className="text-[#5D7A8C] text-sm mt-1 mb-2">
+                    Click to view details and get in touch.
                   </p>
+
+                  <Button
+                    className="w-full mt-4 bg-[#89A8B2] hover:bg-[#5D7A8C] text-white"
+                    onClick={() => {
+                      /* Handle view details */
+                    }}
+                  >
+                    View Details
+                  </Button>
                 </div>
               </div>
             ))}
           </div>
         )}
       </CardContent>
-      <CardFooter>
-        <Button
-          className="w-full"
-          onClick={markAllAsRead}
-          disabled={notifications.length === 0}
-        >
-          <Check /> Mark all as read
-        </Button>
-      </CardFooter>
     </Card>
   );
 }

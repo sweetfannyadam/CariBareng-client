@@ -75,9 +75,6 @@ const Browse = () => {
     fetchLocations();
   }, []);
 
-  console.log(datas);
-
-
   return (
     <div className="pt-10 px-5 md:px-20 xl:px-40">
       {/* Search Bar */}
@@ -123,7 +120,7 @@ const Browse = () => {
       <h3 className="mb-8 text-2xl font-semibold text-gray-700">Lost Items</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {loadingData ? (
-          <Loading  />
+          <Loading />
         ) : (
           datas.map((data) => (
             <MissingItemCard
