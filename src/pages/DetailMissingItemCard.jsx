@@ -32,8 +32,8 @@ const DetailMissingItemCard = () => {
       {datas ? (
         <div className="flex flex-col lg:flex-row gap-10">
           {datas.missing_images.length > 0 ? (
-          <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-72 2xl:mb-56 rounded-xl shadow-xl">
-            <CarouselContent className="h-[500px] lg:w-[350px] lg:h-[250px] xl:w-[500px] xl:h-[400px] flex items-center">
+          <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-72 2xl:mb-44 rounded-xl shadow-xl">
+            <CarouselContent className="h-[350px] lg:w-[350px] lg:h-[250px] xl:w-[500px] xl:h-[400px] flex items-center">
               {datas.missing_images.map((_, index) => (
                 <CarouselItem  key={index}>
                     <img
@@ -48,7 +48,7 @@ const DetailMissingItemCard = () => {
             <div className="flex justify-center ml-[9%] lg:-mt-14 xl:-mt-10 relative">
               <div>
                 <CarouselPrevious className='px-10 rounded-xl -top-12 lg:top-20 -left-5' />
-                <CarouselNext className="px-10 rounded-xl -top-12 left-[25rem] md:left-[32rem] lg:top-20 lg:left-52 xl:left-80 xl:ml-3" />
+                <CarouselNext className="px-10 rounded-xl -top-12 left-56 md:left-[32rem] lg:top-20 lg:left-52 xl:left-80 xl:ml-3" />
               </div>
             </div>
           </Carousel>

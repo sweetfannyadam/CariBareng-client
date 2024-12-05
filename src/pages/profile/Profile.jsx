@@ -40,7 +40,6 @@ const Profile = () => {
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
 
-  console.log(user);
 
   return (
     <>
@@ -50,12 +49,12 @@ const Profile = () => {
             id="profile_img"
             className="rounded-full border-4 w-40 h-40 md:w-60 md:h-60 overflow-hidden"
           >
-            <img src="./profile.jpg" alt="User Profile" />
+            <img className='h-full w-full object-cover object-center' src={ user?.profile_picture || "./profile.jpg"} alt="User Profile" />
           </div>
-          <div id="profile_info" className="text-2xl flex flex-col gap-3">
+          <div id="profile_info" className="text-2xl flex flex-col gap-3 -ml-36">
             <p>{user?.fullname || 'Loading...'}</p>
             <p>{user?.gmail || 'Loading...'}</p>
-            <p>{user?.about_me || 'Ceritakan tentang Anda'}</p>
+            <p className='text-lg'>{user?.about_me || 'Ceritakan tentang Anda'}</p>
             <Link to="/profile/edit">
               <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">Edit Profile</Button>
             </Link>
@@ -91,7 +90,7 @@ const Profile = () => {
                   id={data.id}
                   title={data.title}
                   category={data.category}
-                  image={data.image}
+                  images={data.images}
                   status={data.status}
                 />
               ))}
