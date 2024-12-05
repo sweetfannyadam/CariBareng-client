@@ -35,6 +35,7 @@ import { BarLoader } from 'react-spinners';
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
+import { Avatar } from '@material-tailwind/react';
 
 const EditProfile = () => {
   const {
@@ -143,11 +144,19 @@ const EditProfile = () => {
     <div className="flex justify-center items-center p-5 lg:p-10 xl:p-20 border-4 border-sky-500 rounded-2xl my-20 mx-5 lg:mx-20 xl:mx-40 2xl:mx-60 bg-slate-100 shadow-2xl">
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="flex flex-col">
-          <img
-            className="border-2 border-sky-500 mb-5"
-            src="../missing-found.jpg"
-            alt="foto [username]"
-          />
+          <div
+            id="profile-picture"
+            className="flex justify-center items-center align-center mt-5 mb-10"
+          >
+            <Avatar
+              src={user?.profile_picture}
+              alt="avatar"
+              size="xxl"
+              withBorder={true}
+              className=" border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
+            />
+          </div>
+
           <Form
             {...uploadProfilePictureForm}
             onSubmit={handleSubmit(onUpload)}
