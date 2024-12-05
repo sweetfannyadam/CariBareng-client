@@ -11,7 +11,7 @@ const Home = () => {
           <p className="md:text-lg mb-10">We are a platform that helps you find lost items and connect with people around you. With ease, you can report lost items and search for items that may have been found by someone else.</p>
           <Link to="/browse">
             <Button className="focus-visible:ring-transparent bg-primary hover:bg-primary-foreground hover:text-primary border border-primary" variant="default">
-            View Lost Items
+            View Missing Items
             </Button>
           </Link>
         </div>

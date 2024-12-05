@@ -58,12 +58,11 @@ const DetailMissingItemCard = () => {
             </div>
           )}
           <div className="mt-5 flex-col flex gap-5 text-xl w-full">
-            <div className="grid grid-flow-col gap-10">
+            <div className="grid md:grid-flow-col gap-10">
               <div className="flex flex-col gap-5">
                 <p className="font-semibold">Item Categories: {datas.category}</p>
                 <h1 className="text-3xl">{datas.title}</h1>
                 <p className="text-2xl font-bold">Reward: {datas.reward}</p>
-                <p>Phone Number : {datas.contact}</p>
                 <p>Date : {datas.date_time}</p>
                 <hr className="text-primary" />
                 <p>{datas.description}</p>
@@ -82,13 +81,13 @@ const DetailMissingItemCard = () => {
                         className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg"
                       >
                         <Link to="/edit-item">
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4" id={datas.id} title="aku orang" category={datas.category} reward={datas.reward} date={datas.date_time} description={datas.description} lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
                         </Link>
                       </Button>
                       <DeleteDrawer id={datas.id} />
                     </>
                   ) : (
-                    <FoundThisItem title={datas.title} token={token} username={datas.users.username} />
+                    <FoundThisItem title={datas.title} token={token} target={datas.users.username} />
                   )}
                 </div>
               </div>

@@ -56,7 +56,9 @@ const Profile = () => {
             <p>{user?.gmail || 'Loading...'}</p>
             <p>{user?.about_me || 'Ceritakan tentang Anda'}</p>
             <Link to="/profile/edit">
-              <Button className="bg-sky-500">Edit Profile</Button>
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                Edit Profile
+              </Button>
             </Link>
           </div>
         </div>
@@ -71,13 +73,14 @@ const Profile = () => {
           <h3 className="mb-8 text-2xl font-semibold text-700">
             My Missing Items
           </h3>
-
-          <Link to="/post-item">
-            <Button className="bg-sky-500 mb-4">
-              <Plus />
-              <span>Add Item</span>
-            </Button>
-          </Link>
+          <div className="flex justify-end mb-5">
+            <Link to="/post-item">
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                <Plus />
+                <span>Add Item</span>
+              </Button>
+            </Link>
+          </div>
 
           {userMissingItems.length === 0 ? (
             <p className="text-center m-16">You have no missing items.</p>
