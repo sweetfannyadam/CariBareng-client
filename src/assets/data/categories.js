@@ -19,7 +19,8 @@ const categories = [
   'Tools', // Example: hammers, saws, electric drills
   'Pet Supplies', // Example: pet food, pet accessories
   'Furniture', // Example: chairs, tables, wardrobes
-  'Small Electronics', // Example: chargers, power banks, LED lights
+  'Small Electronics',
+  'Others' // Example: chargers, power banks, LED lights
 ];
 
 export default categories;

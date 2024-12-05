@@ -39,6 +39,17 @@ const NavLinks = () => (
           </span>
         </Link>
       </li>
+      <li>
+        <Link
+          to="/browse"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
+        >
+          <span className="relative">
+            Missing Items
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
+        </Link>
+      </li>
     </ul>
   </>
 );

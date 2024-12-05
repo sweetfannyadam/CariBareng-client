@@ -21,6 +21,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { addMissingItemFormSchema } from '@/schema/AddMissingItemSchema';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
+import categories from "@/assets/data/categories.js"
 
 const AddItemLose = () => {
   const {
@@ -55,14 +56,6 @@ const AddItemLose = () => {
       reward: '',
     },
   });
-
-  const categories = [
-    'Electronics',
-    'Clothing',
-    'Documents',
-    'Accessories',
-    'Others',
-  ];
 
   const onSubmit = async (values) => {
     setIsLoading(true);
