@@ -15,6 +15,7 @@ import Edit from './pages/profile/EditProfile.jsx';
 import { GuestRoute } from './components/GuestRoute.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
 import DetailMissingItemCard from './pages/DetailMissingItemCard.jsx';
+import UpdateItemLose from './pages/updateItemLose.jsx';
 
 function App() {
   return (
@@ -70,6 +71,16 @@ function App() {
             <ProtectedRoute>
               <Layout>
                 <AddItemLose />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-item"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UpdateItemLose />
               </Layout>
             </ProtectedRoute>
           }

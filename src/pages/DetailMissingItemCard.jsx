@@ -81,7 +81,7 @@ const DetailMissingItemCard = () => {
                         className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg"
                       >
                         <Link to="/edit-item">
-                          <Edit className="h-4 w-4" />
+                          <Edit className="h-4 w-4" id={datas.id} title="aku orang" category={datas.category} reward={datas.reward} date={datas.date_time} description={datas.description} lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
                         </Link>
                       </Button>
                       <DeleteDrawer id={datas.id} />

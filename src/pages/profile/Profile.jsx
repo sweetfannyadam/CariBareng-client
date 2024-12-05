@@ -40,7 +40,7 @@ const Profile = () => {
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
 
-  console.log(userMissingItems);
+  console.log(user);
 
   return (
     <>
