@@ -19,7 +19,7 @@ import { Progress } from '@/components/ui/progress';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { addMissingItemFormSchema } from '@/schema/AddMissingItemSchema';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useToast } from '@/hooks/use-toast';
 import {
   Select,
@@ -44,7 +44,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { format } from 'date-fns';
-import { CalendarIcon } from 'lucide-react';
+import { CalendarIcon, X } from 'lucide-react';
 import { cn } from '@/lib/utils';
 import { z } from 'zod';
 import { Calendar } from '@/components/ui/calendar';
@@ -60,22 +60,8 @@ const AddItemLose = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { token } = useAuth();
-
-  // Calendar Schema and Form
-  const calendarSchema = z.object({
-    date: z.date({ required_error: 'Date is required.' }),
-  });
-
-  const calendarForm = useForm({
-    resolver: zodResolver(calendarSchema),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-    reset,
-  } = useForm();
+  const routeLocation = useLocation();
+  const pathname = routeLocation.pathname;
 
   // Main Form for Missing Item
   const addMissingItemForm = useForm({
@@ -86,119 +72,136 @@ const AddItemLose = () => {
       date_time: '',
       last_viewed: '',
       description: '',
-      file: null,
+      images: [], // Changed from file to images
       contact: '',
       reward: '',
     },
   });
 
+  const {
+    handleSubmit,
+    control,
+    register,
+    setValue,
+    formState: { errors },
+  } = addMissingItemForm;
+
   const onSubmit = async (values) => {
-    console.log('Button Clicked', values);
+    console.log('onSubmit: ', values);
     setIsUploading(true);
     setUploadStatus(null);
-    setUploadProgress(0);
+
     setIsSubmitting(true);
 
+    const formData = new FormData();
+
+    // Append the required fields to FormData
+    formData.append('status', 'Missing');
+    formData.append('title', values.title);
+    formData.append('description', values.description);
+    formData.append('last_viewed', values.last_viewed);
+    formData.append('date_time', values.date_time);
+    formData.append('contact', values.contact);
+    formData.append('category', values.category);
+    formData.append('reward', values.reward);
+    formData.append('location[lat]', location.lat);
+    formData.append('location[lng]', location.lng);
+
+    // Append each file to FormData (up to 3 images)
+    if (values.images && values.images.length > 0) {
+      values.images.forEach((file) => {
+        formData.append('image', file); // Use 'images[]' to indicate an array
+      });
+    } else {
+      setUploadStatus({ type: 'error', message: 'No images selected.' });
+      setIsUploading(false);
+      return;
+    }
+
     try {
-      // Check if files are selected
-      if (!values.file || values.file.length === 0) {
-        setUploadStatus({ type: 'error', message: 'No images selected.' });
-        setIsUploading(false);
-        return;
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
       }
-
-      // Prepare FormData
-      const formData = new FormData();
-      Array.from(values.file).forEach((file) => {
-        formData.append('images', file);
-      });
-
-      // Ensure location is available
-      if (!location || !location.lat || !location.lng) {
-        setUploadStatus({
-          type: 'error',
-          message: 'Please pick a location on the map.',
-        });
-        setIsUploading(false);
-        return;
-      }
-
-      // Construct payload
-      const payload = {
-        title: values.title,
-        category: values.category,
-        date_time: values.date_time,
-        last_viewed: values.last_viewed,
-        description: values.description,
-        contact: values.contact,
-        reward: values.reward,
-        location: {
-          lat: location.lat.toString(),
-          lng: location.lng.toString(),
-        },
-        status: 'missing',
-      };
-
-      // Add the rest of the form data fields
-      Object.keys(payload).forEach((key) => {
-        formData.append(key, payload[key]);
-      });
-
-      // Call API
       const response = await createMissingItem(token, formData);
-      console.log('API Response:', response);
-
-      // Handle success
+      console.log('Response:', response);
       setUploadStatus({
         type: 'success',
         message: 'Item posted successfully!',
       });
-
-      // Reset form and navigate
-      addMissingItemForm.reset();
-      navigate('/profile');
+      toast({
+        title: 'Success',
+        description: 'Item posted successfully!',
+      });
+      // addMissingItemForm.reset();
+      // navigate('/profile');
     } catch (error) {
-      console.error(error);
+      console.error('Error creating notification:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create notification.',
+        variant: 'destructive',
+      });
       setUploadStatus({
         type: 'error',
         message: error.message || 'Failed to post item',
       });
     } finally {
-      setIsUploading(false);
       setIsSubmitting(false);
+      setIsUploading(false);
     }
+  };
+
+  // Handle file input change
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setValue('images', files); // Set the files in the form state
+  };
+
+  const handleClose = () => {
+    console.log('Pathname: ', pathname);
+    pathname !== '/browser' ? navigate('/browse') : navigate('/profile');
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen lg:mt-10 transition-all ease-in-out">
+      <button
+        onClick={handleClose}
+        className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+        aria-label="Close"
+      >
+        <X className="h-5 w-5 text-gray-700" />
+      </button>
       <Card className="w-[1000px]">
         <CardHeader>
           <CardTitle>Post Your Lost Item</CardTitle>
         </CardHeader>
         <CardContent>
           <Form {...addMissingItemForm}>
-            <form
-              onSubmit={addMissingItemForm.handleSubmit(onSubmit)}
-              className="grid gap-4"
-            >
+            <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
               {/* Title Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="title"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Title Item</FormLabel>
                     <FormControl>
-                      <Input placeholder="Title of your item" {...field} />
+                      <Input
+                        name="title"
+                        type="text"
+                        id="title"
+                        placeholder="Title of your item"
+                        {...field}
+                      />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage>{errors.title?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Category Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="category"
                 render={({ field }) => (
                   <FormItem>
@@ -217,6 +220,8 @@ const AddItemLose = () => {
                           <SelectLabel>Item Categories</SelectLabel>
                           {categories.map((category) => (
                             <SelectItem
+                              name="category"
+                              id="category"
                               className="cursor-pointer"
                               key={category}
                               value={category}
@@ -227,15 +232,16 @@ const AddItemLose = () => {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
-                    <FormMessage />
+                    <FormMessage>{errors.category?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Date Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="date_time"
+                id="date_time"
                 render={({ field }) => (
                   <FormItem className="flex flex-col">
                     <FormLabel>Date and Time</FormLabel>
@@ -274,15 +280,16 @@ const AddItemLose = () => {
                         />
                       </PopoverContent>
                     </Popover>
-                    <FormMessage />
+                    <FormMessage>{errors.date_time?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Last Viewed Location Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="last_viewed"
+                id="last_viewed"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Last Viewed Location</FormLabel>
@@ -292,14 +299,14 @@ const AddItemLose = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage>{errors.last_viewed?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Description Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="description"
                 render={({ field }) => (
                   <FormItem>
@@ -310,14 +317,14 @@ const AddItemLose = () => {
                         {...field}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage>{errors.description?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Contact Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="contact"
                 render={({ field }) => (
                   <FormItem>
@@ -325,14 +332,14 @@ const AddItemLose = () => {
                     <FormControl>
                       <Input placeholder="Input your contact" {...field} />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage>{errors.contact?.message}</FormMessage>
                   </FormItem>
                 )}
               />
 
               {/* Reward Field */}
               <FormField
-                control={addMissingItemForm.control}
+                control={control}
                 name="reward"
                 render={({ field }) => (
                   <FormItem>
@@ -352,40 +359,22 @@ const AddItemLose = () => {
 
               {/* File Upload */}
               <FormField
-                control={addMissingItemForm.control}
-                name="file"
-                render={({ field }) => (
+                control={control}
+                name="images"
+                render={() => (
                   <FormItem>
-                    <FormLabel
-                      htmlFor="file"
-                      className="text-sm font-medium"
-                      style={{ color: '#2C3E50' }}
-                    >
+                    <FormLabel className="text-sm font-medium">
                       Choose Files
                     </FormLabel>
                     <FormControl>
                       <Input
-                        name="file"
-                        id="file"
                         type="file"
                         multiple
-                        {...register('file', {
-                          required: 'Please select a file',
-                          validate: {
-                            lessThan2MB: (files) =>
-                              files[0]?.size < 2000000 || 'Max 2MB',
-                            acceptedFormats: (files) =>
-                              ['image/jpeg', 'image/png'].includes(
-                                files[0]?.type
-                              ) || 'Only JPEG and PNG files are allowed',
-                          },
-                        })}
+                        onChange={handleFileChange}
                         className="mt-1"
-                        disabled={isUploading}
-                        onChange={(e) => field.onChange(e.target.files)}
                       />
                     </FormControl>
-                    <FormMessage />
+                    <FormMessage>{errors.images?.message}</FormMessage>
                   </FormItem>
                 )}
               />
@@ -411,21 +400,26 @@ const AddItemLose = () => {
                   <AlertDescription>{uploadStatus.message}</AlertDescription>
                 </Alert>
               )}
+              <Button
+                type="submit"
+                onClick={() => {
+                  handleSubmit(onSubmit(addMissingItemForm.getValues()));
+                  console.log('values', addMissingItemForm.getValues());
+                }}
+              >
+                {isSubmitting ? (
+                  <>
+                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                    Please wait
+                  </>
+                ) : (
+                  'Post Item'
+                )}
+              </Button>
             </form>
           </Form>
+          <CardFooter className="justify-end"></CardFooter>
         </CardContent>
-        <CardFooter className="justify-end">
-          <Button type="submit" onClick={onSubmit} disabled={isSubmitting}>
-            {isSubmitting ? (
-              <>
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Please wait
-              </>
-            ) : (
-              'Post Item'
-            )}
-          </Button>
-        </CardFooter>
       </Card>
     </div>
   );

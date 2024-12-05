@@ -24,12 +24,12 @@ export const fetchMissingItem = async (tableId) => {
   }
 };
 
-export const createMissingItem = async (payload, token) => {
+export const createMissingItem = async (token, payload) => {
   try {
     const response = await axiosInstance.post('/missings', payload, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data.data;
+    return response;
   } catch (error) {
     console.error(
       'Error creating missing item:',
