@@ -8,62 +8,117 @@ import {
   DrawerTrigger,
 } from './ui/drawer';
 import { Button } from './ui/button';
-import { Form } from './ui/form';
 import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useEffect, useState } from 'react';
+import { z } from 'zod';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { useForm } from 'react-hook-form';
+import { createNotification } from '@/utils/notification';
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormLabel,
+  FormItem,
+  FormMessage,
+} from '@/components/ui/form';
+import { CardFooter } from '@material-tailwind/react';
+import { useAuth } from '@/context/AuthContext';
+import { toast } from '@/hooks/use-toast';
 
-const FoundThisItem = ({ title, token, username }) => {
-  const [formData, setFormData] = useState({
-    title: title,
-    location: '',
-    no_hp: '',
-    description: '',
-    image: [],
+const FoundThisItem = ({ missingItem }) => {
+  const { token } = useAuth();
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Define the validation schema
+  const foundThisItemFormSchema = z.object({
+    description: z.string().nonempty('Item Description is required.'),
+    location: z.string().nonempty('Where did you find this item is required.'),
+    no_hp: z.string().nonempty('Phone Number is required.'),
+    images: z
+      .array(z.instanceof(File))
+      .max(3, 'You can upload up to 3 images.'),
   });
-  const [errors, setErrors] = useState({});
 
-  useEffect(() => {
-    const sendNotification = async (data) => {
-      const payload = {
-        title: formData.title,
-        location: formData.location,
-        no_hp: formData.no_hp,
-        description: formData.description,
-        image: formData.image,
-      };
-    };
+  // Initialize the form with react-hook-form
+  const foundThisItemForm = useForm({
+    resolver: zodResolver(foundThisItemFormSchema),
+    defaultValues: {
+      description: '',
+      location: '',
+      no_hp: '',
+      images: [],
+    },
   });
 
-  const validateForm = () => {
-    const newErrors = {};
-    if (!formData.location)
-      newErrors.location = 'Where did you find is required.';
-    if (!formData.no_hp) newErrors.no_hp = 'Phone Number is required.';
-    if (!formData.description)
-      newErrors.description = 'Item Description is required.';
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+  const {
+    handleSubmit,
+    control,
+    register,
+    setValue,
+    formState: { errors },
+  } = foundThisItemForm;
 
-  const handleSubmit = async () => {
-    if (!validateForm()) return;
+  const sendNotification = async (values) => {
+    setIsLoading(true);
+    const formData = new FormData();
+
+    // Append the required fields to FormData
+    formData.append('location', values.location);
+    formData.append('description', values.description);
+    formData.append('no_hp', values.no_hp);
+    formData.append('missing_id', missingItem.id);
+    formData.append('title', missingItem.title);
+
+    console.log('Images:', values.images);
+    // formData.append('image', values.images);
+    // Append each file to FormData (up to 3 images)
+    values.images.forEach((file) => {
+      formData.append('image', file); // Use 'images[]' to indicate an array
+    });
+
+    // Prepare the images array
+    // const imagesArray = values.images.map((file) => {
+    //   return file; // Create an object for each file
+    // });
+
+    // console.log('Images Array:', imagesArray);
+
+    // // Append the images array to FormData
+    // imagesArray.forEach((image) => {
+    //   formData.append('images[]', JSON.stringify(image)); // Use 'images[]' to indicate an array
+    // });
 
     try {
-      const payload = {
-        title: formData.title,
-        location: formData.location,
-        no_hp: formData.no_hp,
-        description: formData.description,
-        image: formData.image,
-      };
-      const createdItem = await createFoundItem(payload, token, username);
-      console.log('Item created:', createdItem);
+      console.log('Form Data: ', formData);
+      const response = await createNotification(
+        token,
+        missingItem.users.username,
+        formData
+      );
+
+      for (let [key, value] of formData.entries()) {
+        console.log(key, value);
+      }
+      console.log('Response:', response);
     } catch (error) {
-      console.error('Error during submission:', error);
-      alert('Terjadi kesalahan saat memposting item.');
+      console.error('Error creating notification:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to create notification.',
+        variant: 'destructive',
+      });
+    } finally {
+      setIsLoading(false);
     }
+  };
+
+  // Handle file input change
+  const handleFileChange = (event) => {
+    const files = Array.from(event.target.files);
+    setValue('images', files); // Set the files in the form state
   };
 
   return (
@@ -81,129 +136,93 @@ const FoundThisItem = ({ title, token, username }) => {
               Please fill out the form below to indicate that you have found the
               right item.
             </DrawerDescription>
-            <Form>
-              <Label className="text-start" htmlFor="location">
-                Where did you find
-              </Label>
-              <Input
-                type="text"
-                id="location"
-                name="location"
-                onChange={(e) =>
-                  setFormData({ ...formData, location: e.target.value })
-                }
-              />
-              {errors.location && (
-                <span className="text-red-500">{errors.location}</span>
-              )}
-
-              <Label className="text-start" htmlFor="no_hp">
-                Phone Number
-              </Label>
-              <Input
-                type="text"
-                id="no_hp"
-                name="no_hp"
-                onChange={(e) =>
-                  setFormData({ ...formData, no_hp: e.target.value })
-                }
-              />
-              {errors.no_hp && (
-                <span className="text-red-500">{errors.no_hp}</span>
-              )}
-
-              <Label className="text-start" htmlFor="description">
-                Item Description
-              </Label>
-              <Textarea
-                type="text"
-                id="description"
-                name="description"
-                onChange={(e) =>
-                  setFormData({ ...formData, description: e.target.value })
-                }
-              />
-              {errors.description && (
-                <span className="text-red-500">{errors.description}</span>
-              )}
-
-              <Form
-                {...uploadProfilePictureForm}
-                onSubmit={handleSubmit(onUpload)}
-                className="space-y-6"
-              >
-                <div>
-                  <Label
-                    htmlFor="file"
-                    className="text-sm font-medium"
-                    style={{ color: '#2C3E50' }}
-                  >
-                    Choose a file
-                  </Label>
-                  <Input
-                    id="file"
-                    type="file"
-                    {...register('file', {
-                      required: 'Please select a file',
-                      validate: {
-                        lessThan2MB: (files) =>
-                          files[0]?.size < 2000000 || 'Max 2MB',
-                        acceptedFormats: (files) =>
-                          ['image/jpeg', 'image/png'].includes(
-                            files[0]?.type
-                          ) || 'Only JPEG and PNG files are allowed',
-                      },
-                    })}
-                    className="mt-1"
-                    disabled={isUploading}
-                  />
-                  {errors.file && (
-                    <p className="mt-1 text-sm" style={{ color: '#e74c3c' }}>
-                      {errors.file.message}
-                    </p>
-                  )}
-                </div>
-
-                <div className="flex justify-end">
-                  <Button
-                    type="submit"
-                    disabled={isUploading}
-                    style={{
-                      backgroundColor: '#89A8B2',
-                      color: 'white',
-                      '&:hover': { backgroundColor: '#5D7A8C' },
-                    }}
-                  >
-                    {isUploading ? (
-                      <>
-                        <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                        Uploading
-                      </>
-                    ) : (
-                      'Upload'
-                    )}
-                  </Button>
-                </div>
-              </Form>
-              {/* <div className="grid grid-flow-col gap-5">
-                <div>
-                  <Label htmlFor={`image-1`}>Image </Label>
-                  <Input
-                    type="file"
-                    id={`image`}
-                    multiple
-                    onChange={(e) =>
-                      setFormData({ ...formData, image: e.target.value })
-                    }
-                  />
-                </div>
-              </div> */}
-            </Form>
           </DrawerHeader>
-          <DrawerFooter>
-            <Button onClick={handleSubmit}>Submit</Button>
-            <Button variant="outline">Cancel</Button>
-          </DrawerFooter>
+          <Form {...foundThisItemForm}>
+            <form
+              onSubmit={handleSubmit(sendNotification)}
+              className="space-y-8"
+            >
+              <FormField
+                control={control}
+                name="location"
+                render={({ field }) => (
+                  <FormItem className="space-y-1 ">
+                    <FormLabel>Where did you find this item?</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="location"
+                        type="text"
+                        placeholder="Please enter a location"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage>{errors.location?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="no_hp"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Phone Number</FormLabel>
+                    <FormControl>
+                      <Input
+                        id="no_hp"
+                        type="text"
+                        placeholder="Enter your phone number"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage>{errors.no_hp?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="description"
+                render={({ field }) => (
+                  <FormItem className="space-y-1">
+                    <FormLabel>Item Description</FormLabel>
+                    <FormControl>
+                      <Textarea
+                        id="description"
+                        placeholder="Describe the item"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage>{errors.description?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={control}
+                name="images"
+                render={() => (
+                  <FormItem className="space-y-1">
+                    <FormLabel className="text-sm font-medium">
+                      Upload Images
+                    </FormLabel>
+                    <FormControl>
+                      <Input
+                        id="images"
+                        type="file"
+                        multiple
+                        onChange={handleFileChange}
+                        className="mt-1"
+                      />
+                    </FormControl>
+                    <FormMessage>{errors.images?.message}</FormMessage>
+                  </FormItem>
+                )}
+              />
+              <CardFooter className="justify-end">
+                <Button type="submit" disabled={isLoading}>
+                  {isLoading ? 'Processing...' : 'Report'}
+                </Button>
+              </CardFooter>
+            </form>
+          </Form>
         </div>
       </DrawerContent>
     </Drawer>
