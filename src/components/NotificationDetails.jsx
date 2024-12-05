@@ -13,6 +13,7 @@ import { approveMissingItem } from '@/utils/missings';
 import { fetchNotification } from '@/utils/notification';
 import { useAuth } from '@/context/AuthContext';
 import axiosInstance from '@/api/axios';
+import { toast } from '@/hooks/use-toast';
 
 export function NotificationModal({ notification, onClose }) {
   const { token } = useAuth();
@@ -38,49 +39,36 @@ export function NotificationModal({ notification, onClose }) {
     // Remove toggle parameter
     if (notificationDetails) {
       // Check if details are loaded
+      const payload = {
+        toggle: 'true',
+        tableId: 'missing-tLU6J1cg-X',
+      };
       try {
-        const payload = {
-          toggle: 'true', // Directly set to true
-          tableId: notificationDetails.notification.missing_id,
-        };
-        console.log('Payload:', payload);
-        const response = await approveMissingItem(token, payload);
-        console.log('Notification approved:', response);
+        const response = await axiosInstance.post(`/approve`, payload, {
+          headers: {
+            Authorization: `Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6InVzZXItS0pNdEhlejBmWSIsInVzZXJuYW1lIjoiZWxpemFiZXRoMTIwNyIsImlhdCI6MTczMzM4MTYwNiwiZXhwIjoxNzMzNDY4MDA2fQ.oc6FBxUtgnKFWejsIMs0bpMUjrfISp3XX8uhK00ypPQ`,
+          },
+        });
+        toast({
+          title: 'Notification Approved',
+          description: 'The notification has been approved successfully',
+        });
 
-        onClose(); // Close the modal after approval
+        return response;
       } catch (error) {
-        console.error('Error approving notification:', error);
+        console.error(error.response?.data || error.message);
       }
+      // try {
+      //   console.log('Payload:', payload);
+      //   const response = await approveMissingItem(token, payload);
+      //   console.log('Notification approved:', response);
+
+      //   onClose(); // Close the modal after approval
+      // } catch (error) {
+      //   console.error('Error approving notification:', error);
+      // }
     }
   };
-  //   const fetchNotificationDetails = async () => {
-  //     try {
-  //       const response = await fetchNotification(token, notification.id);
-  //       console.log('Response:', response.data.data);
-  //       setNotificationDetails(response.data.data);
-  //     } catch (error) {
-  //       console.error('Error fetching notification details:', error);
-  //     }
-  //   };
-  //   const approveNotification = async (toggle) => {
-  //     if (toggle) {
-  //       const payload = {
-  //         toggle: toggle,
-  //         tableId: notificationDetails.tableId,
-  //       };
-  //       await approveMissingItem(token, payload);
-  //       setToggle(null);
-  //       try {
-  //         // const response = await approveMissingItem(token, payload);
-  //         console.log('Notification approved:', response);
-  //       } catch (error) {
-  //         console.error('Error approving notification:', error);
-  //       }
-  //     }
-  //   };
-  //   fetchNotificationDetails();
-  //   approveNotification(toggle);
-  // }, [notification, token, notificationDetails, toggle]);
 
   if (!notificationDetails) {
     return null;
@@ -160,7 +148,10 @@ export function NotificationModal({ notification, onClose }) {
           </Button>
 
           <Button
-            onClick={approveNotification}
+            onClick={() => {
+              console.log('Approve button clicked');
+              approveNotification();
+            }}
             className="mb-2 bg-[#89A8B2] hover:bg-[#5D7A8C] text-white"
           >
             Approve
