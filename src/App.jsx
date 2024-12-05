@@ -24,9 +24,11 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout withHeader={true}>
-              <Home />
-            </Layout>
+            <GuestRoute>
+              <Layout withHeader={true}>
+                <Home />
+              </Layout>
+            </GuestRoute>
           }
         />
         <Route

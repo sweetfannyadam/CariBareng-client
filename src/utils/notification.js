@@ -12,7 +12,6 @@ export const createNotification = async (token, target, payload) => {
       }
     );
     console.log('Response utils:', response);
-
     return response;
   } catch (error) {
     console.error('Error creating notification:', error);

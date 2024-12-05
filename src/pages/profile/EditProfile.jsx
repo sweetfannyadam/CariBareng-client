@@ -32,7 +32,7 @@ import {
   CardTitle,
 } from '@/components/ui/card';
 import { BarLoader } from 'react-spinners';
-import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
+import { AlertCircle, CheckCircle2, Loader2, X } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
 import { Avatar } from '@material-tailwind/react';
@@ -57,12 +57,13 @@ const EditProfile = () => {
   const editProfileForm = useForm({
     resolver: zodResolver(editProfileFormSchema),
     defaultValues: {
+      // fullname: '',
+      // username: '',
+      // gmail: '',
+      // no_hp: '',
       fullname: user?.fullname || '',
-      username: user?.username || '',
-      gmail: user?.gmail || '',
+
       no_hp: user?.no_hp || '',
-      password: user?.password || '',
-      confirm_password: user?.confirm_password || '',
     },
   });
 
@@ -80,12 +81,14 @@ const EditProfile = () => {
     try {
       const payload = {
         fullname: values.fullname,
-        username: values.username,
-        gmail: values.gmail,
+        // username: values.username,
+        // gmail: values.gmail,
         no_hp: values.no_hp,
       };
 
-      updateUser(payload);
+      const response = await updateUser(token, payload);
+      console.log('Response:', response);
+      console.log('Payload:', payload);
       toast({
         variant: 'default',
         description: 'Profile updated',
@@ -140,16 +143,30 @@ const EditProfile = () => {
     }
   };
 
+  const handleClose = () => {
+    navigate('/profile'); // Navigate to the profile page or any other route
+  };
+
   return (
     <div className="flex justify-center items-center p-5 lg:p-10 xl:p-20 border-4 border-sky-500 rounded-2xl my-20 mx-5 lg:mx-20 xl:mx-40 2xl:mx-60 bg-slate-100 shadow-2xl">
       <div className="grid lg:grid-cols-2 gap-5">
         <div className="flex flex-col">
+          <button
+            onClick={handleClose}
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5 text-gray-700" />
+          </button>
           <div
             id="profile-picture"
             className="flex justify-center items-center align-center mt-5 mb-10"
           >
             <Avatar
-              src={user?.profile_picture}
+              src={
+                user?.profile_picture ||
+                `https://avatar.iran.liara.run/username?username=${user.fullname}]`
+              }
               alt="avatar"
               size="xxl"
               withBorder={true}
@@ -194,7 +211,7 @@ const EditProfile = () => {
               )}
             </div>
 
-            <div className="flex justify-end">
+            <div className="flex justify-end mt-2">
               <Button
                 type="submit"
                 disabled={isUploading}
@@ -263,9 +280,8 @@ const EditProfile = () => {
                     <Input
                       id="fullname"
                       type="text"
-                      placeholder="Edit your fullname"
+                      placeholder="Enter your fullname"
                       {...field}
-                      value={field.value || user.fullname}
                     />
                   </FormControl>
                   <FormMessage />
@@ -284,7 +300,6 @@ const EditProfile = () => {
                       type="text"
                       placeholder="Choose a username"
                       {...field}
-                      value={field.value || user.username}
                     />
                   </FormControl>
                   <FormMessage />
@@ -303,7 +318,6 @@ const EditProfile = () => {
                       type="email"
                       placeholder="Enter your email address"
                       {...field}
-                      value={field.value || user.gmail}
                     />
                   </FormControl>
                   <FormMessage />
@@ -322,7 +336,6 @@ const EditProfile = () => {
                       type="tel"
                       placeholder="Enter your phone number"
                       {...field}
-                      value={field.value || user.no_hp}
                     />
                   </FormControl>
                   <FormMessage />
@@ -330,8 +343,8 @@ const EditProfile = () => {
               )}
             />
 
-            <CardFooter className="justify-end">
-              <Button type="submit" disabled={isLoading}>
+            <CardFooter className="justify-end p-0">
+              <Button type="submit" className="mb-4" disabled={isLoading}>
                 {isLoading ? (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 ) : (
@@ -347,34 +360,3 @@ const EditProfile = () => {
 };
 
 export default EditProfile;
-
-// import React from 'react';
-// import { useForm } from 'react-hook-form';
-
-// function App() {
-//   const { register, handleSubmit } = useForm();
-
-//   const onSubmit = async (data) => {
-//     const formData = new FormData();
-//     formData.append('file', data.file[0]);
-//     console.log(data.file[0]);
-
-//     const res = await fetch('http://localhost:5000/upload-file', {
-//       method: 'POST',
-//       body: formData,
-//     }).then((res) => res.json());
-//     alert(JSON.stringify(`${res.message}, status: ${res.status}`));
-//   };
-
-//   return (
-//     <div className="App">
-//       <form onSubmit={handleSubmit(onSubmit)}>
-//         <input type="file" {...register('file')} />
-
-//         <input type="submit" />
-//       </form>
-//     </div>
-//   );
-// }
-
-// export default App;

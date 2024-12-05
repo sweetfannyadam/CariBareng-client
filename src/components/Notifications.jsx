@@ -55,13 +55,15 @@ export function Notifications({ className, ...props }) {
     });
   };
 
+  console.log('Notifications:', notifications);
+
   return (
     <Card className={cn('border-none mr-20 w-full', className)} {...props}>
       <CardHeader>
         <CardTitle>Notifications</CardTitle>
         <CardDescription>
-          {notifications.length} unread{' '}
-          {notifications.length === 1 ? 'message' : 'messages'}.
+          {notifications.length}{' '}
+          {notifications.length === 1 ? 'notification' : 'notifications'}.
         </CardDescription>
       </CardHeader>
       <CardContent className="grid gap-4">

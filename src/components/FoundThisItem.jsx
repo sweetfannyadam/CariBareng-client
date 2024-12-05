@@ -27,10 +27,12 @@ import {
 import { CardFooter } from '@material-tailwind/react';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
+import { X } from 'lucide-react';
 
 const FoundThisItem = ({ missingItem }) => {
   const { token } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
 
   // Define the validation schema
   const foundThisItemFormSchema = z.object({
@@ -72,24 +74,10 @@ const FoundThisItem = ({ missingItem }) => {
     formData.append('missing_id', missingItem.id);
     formData.append('title', missingItem.title);
 
-    console.log('Images:', values.images);
-    // formData.append('image', values.images);
     // Append each file to FormData (up to 3 images)
     values.images.forEach((file) => {
       formData.append('image', file); // Use 'images[]' to indicate an array
     });
-
-    // Prepare the images array
-    // const imagesArray = values.images.map((file) => {
-    //   return file; // Create an object for each file
-    // });
-
-    // console.log('Images Array:', imagesArray);
-
-    // // Append the images array to FormData
-    // imagesArray.forEach((image) => {
-    //   formData.append('images[]', JSON.stringify(image)); // Use 'images[]' to indicate an array
-    // });
 
     try {
       console.log('Form Data: ', formData);
@@ -99,9 +87,9 @@ const FoundThisItem = ({ missingItem }) => {
         formData
       );
 
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
+      // for (let [key, value] of formData.entries()) {
+      //   console.log(key, value);
+      // }
       console.log('Response:', response);
     } catch (error) {
       console.error('Error creating notification:', error);
@@ -121,15 +109,32 @@ const FoundThisItem = ({ missingItem }) => {
     setValue('images', files); // Set the files in the form state
   };
 
+  const toggleDrawer = () => {
+    console.log('Toggle Drawer');
+    setIsOpen(!isOpen); // Toggle the drawer state
+    console.log('Is Open: ', isOpen);
+  };
+
   return (
-    <Drawer className="z-50">
+    <Drawer open={isOpen} onOpenChange={toggleDrawer} className="z-50">
       <DrawerTrigger>
-        <Button className="w-full bg-primary text-primary-foreground hover:bg-primary-foreground border-2 border-primary hover:text-primary shadow-lg">
+        <Button
+          className="w-full bg-primary text-primary-foreground hover:bg-primary-foreground border-2 border-primary hover:text-primary shadow-lg"
+          onClick={toggleDrawer}
+        >
           I FOUND THIS ITEM
         </Button>
       </DrawerTrigger>
+
       <DrawerContent>
         <div className="mx-auto w-full max-w-sm">
+          <button
+            onClick={toggleDrawer}
+            className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
+            aria-label="Close"
+          >
+            <X className="h-5 w-5 text-gray-700" />
+          </button>
           <DrawerHeader>
             <DrawerTitle>Have you really found this item?</DrawerTitle>
             <DrawerDescription className="mb-2">
