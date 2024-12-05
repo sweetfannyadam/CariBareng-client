@@ -14,7 +14,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover';
 import { Link } from 'react-router-dom';
-import { CardDemo } from '../Notifications';
+import { Notifications } from '../Notifications';
 import { useAuth } from '@/context/AuthContext';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../ui/button';
@@ -105,7 +105,7 @@ const UserMenu = () => {
             <PopoverContent
               className={'relative top-0 bottom-0 right-0 left-0'}
             >
-              <CardDemo className={'w-full'} />
+              <Notifications className={'w-full'} />
             </PopoverContent>
           </Popover>
         </div>

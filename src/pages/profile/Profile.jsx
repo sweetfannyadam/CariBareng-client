@@ -19,7 +19,6 @@ const Profile = () => {
       if (isAuthenticated && token) {
         try {
           const data = await fetchUserMissingItems(token);
-          console.log('Data:', data);
           if (
             data?.status === 'fail' &&
             data?.message?.toLowerCase().includes('token tidak valid')
@@ -40,8 +39,6 @@ const Profile = () => {
 
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
-
-  console.log(userMissingItems);
 
   return (
     <>

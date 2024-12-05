@@ -106,3 +106,15 @@ export const updateMissingItemPicture = async (
     );
   }
 };
+
+export const approveMissingItem = async (token, payload) => {
+  try {
+    const response = await axiosInstance.post(`/approve`, {
+      headers: { Authorization: `Bearer ${token}` },
+      payload,
+    });
+    return response;
+  } catch (error) {
+    console.error(error.response?.data || error.message);
+  }
+};
