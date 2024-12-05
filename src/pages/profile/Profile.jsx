@@ -1,5 +1,4 @@
 import MissingItemCard from '@/components/MissingItemCard';
-import StatsCard from '@/components/StatsCard';
 import { Button } from '@/components/ui/button';
 import { useAuth } from '@/context/AuthContext';
 import { useEffect, useState } from 'react';
