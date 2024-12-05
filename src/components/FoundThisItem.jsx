@@ -13,7 +13,6 @@ import { Label } from './ui/label';
 import { Input } from './ui/input';
 import { Textarea } from './ui/textarea';
 import { useEffect, useState } from 'react';
-import { createFoundItem } from '@/utils/foundItem';
 
 const FoundThisItem = ({ title, token, username }) => {
   const [formData, setFormData] = useState({
