@@ -116,7 +116,7 @@ const Auth = () => {
 
       login(accessToken, refreshToken);
 
-      navigate('/browse');
+      navigate('/browse-missing');
     } catch (error) {
       toast({
         variant: 'destructive',

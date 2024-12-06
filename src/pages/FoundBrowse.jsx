@@ -111,7 +111,7 @@ const Browse = () => {
   console.log(datas);
 
   return (
-    <div className="pt-10 px-5 md:px-20 xl:px-40">
+    <div className="pt-10 px-5 md:px-20 xl:px-10 2xl:px-40">
       {/* Search Bar */}
       <div className="flex flex-col md:flex-row justify-between mb-6 gap-4">
         <Input

@@ -28,11 +28,13 @@ import { CardFooter } from '@material-tailwind/react';
 import { useAuth } from '@/context/AuthContext';
 import { toast } from '@/hooks/use-toast';
 import { X } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 
 const FoundThisItem = ({ missingItem }) => {
   const { token } = useAuth();
   const [isLoading, setIsLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Define the validation schema
   const foundThisItemFormSchema = z.object({
@@ -91,6 +93,7 @@ const FoundThisItem = ({ missingItem }) => {
       //   console.log(key, value);
       // }
       console.log('Response:', response);
+      navigate('/browse-missing');
     } catch (error) {
       console.error('Error creating notification:', error);
       toast({
@@ -127,7 +130,7 @@ const FoundThisItem = ({ missingItem }) => {
       </DrawerTrigger>
 
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="px-5 md:px-0 md:mx-auto w-full max-w-sm">
           <button
             onClick={toggleDrawer}
             className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"
@@ -145,7 +148,7 @@ const FoundThisItem = ({ missingItem }) => {
           <Form {...foundThisItemForm}>
             <form
               onSubmit={handleSubmit(sendNotification)}
-              className="space-y-8"
+              className="flex flex-col gap-5"
             >
               <FormField
                 control={control}
@@ -221,7 +224,7 @@ const FoundThisItem = ({ missingItem }) => {
                   </FormItem>
                 )}
               />
-              <CardFooter className="justify-end">
+              <CardFooter className="flex px-0 -mt-5 mb-5 justify-end w-full">
                 <Button type="submit" disabled={isLoading}>
                   {isLoading ? 'Processing...' : 'Report'}
                 </Button>

@@ -65,7 +65,7 @@ const AddItemLose = () => {
       date_time: '',
       last_viewed: '',
       description: '',
-      images: [], // Changed from file to images
+      images: [], 
       contact: '',
       reward: '',
     },
@@ -88,7 +88,6 @@ const AddItemLose = () => {
 
     const formData = new FormData();
 
-    // Append the required fields to FormData
     formData.append('status', 'Missing');
     formData.append('title', values.title);
     formData.append('description', values.description);
@@ -100,10 +99,9 @@ const AddItemLose = () => {
     formData.append('location[lat]', location.lat);
     formData.append('location[lng]', location.lng);
 
-    // Append each file to FormData (up to 3 images)
     if (values.images && values.images.length > 0) {
       values.images.forEach((file) => {
-        formData.append('image', file); // Use 'images[]' to indicate an array
+        formData.append('image', file); 
       });
     } else {
       setUploadStatus({ type: 'error', message: 'No images selected.' });
@@ -126,7 +124,9 @@ const AddItemLose = () => {
         description: 'Item posted successfully!',
       });
       // addMissingItemForm.reset();
-      // navigate('/profile');
+      setTimeout(() => {
+        navigate('/browse-missing');
+      }, 2000);
     } catch (error) {
       console.error('Error creating notification:', error);
       toast({
@@ -152,7 +152,7 @@ const AddItemLose = () => {
 
   const handleClose = () => {
     console.log('Pathname: ', pathname);
-    pathname !== '/browser' ? navigate('/browse') : navigate('/profile');
+    pathname !== '/browser-missing' ? navigate('/browse-missing') : navigate('/profile');
   };
 
   return (
@@ -171,112 +171,113 @@ const AddItemLose = () => {
         <CardContent>
           <Form {...addMissingItemForm}>
             <form onSubmit={handleSubmit(onSubmit)} className="grid gap-4">
-              {/* Title Field */}
-              <FormField
-                control={control}
-                name="title"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Title Item</FormLabel>
-                    <FormControl>
-                      <Input
-                        name="title"
-                        type="text"
-                        id="title"
-                        placeholder="Title of your item"
-                        {...field}
-                      />
-                    </FormControl>
-                    <FormMessage>{errors.title?.message}</FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              {/* Category Field */}
-              <FormField
-                control={control}
-                name="category"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Category</FormLabel>
-                    <Select
-                      onValueChange={field.onChange}
-                      defaultValue={field.value}
-                    >
+              <div className='grid grid-cols-3 gap-5 items-center'>
+                {/* Title Field */}
+                <FormField
+                  control={control}
+                  name="title"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Title Item</FormLabel>
                       <FormControl>
-                        <SelectTrigger>
-                          <SelectValue placeholder="Select a category" />
-                        </SelectTrigger>
-                      </FormControl>
-                      <SelectContent>
-                        <SelectGroup>
-                          <SelectLabel>Item Categories</SelectLabel>
-                          {categories.map((category) => (
-                            <SelectItem
-                              name="category"
-                              id="category"
-                              className="cursor-pointer"
-                              key={category}
-                              value={category}
-                            >
-                              {category}
-                            </SelectItem>
-                          ))}
-                        </SelectGroup>
-                      </SelectContent>
-                    </Select>
-                    <FormMessage>{errors.category?.message}</FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              {/* Date Field */}
-              <FormField
-                control={control}
-                name="date_time"
-                id="date_time"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col">
-                    <FormLabel>Date and Time</FormLabel>
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <FormControl>
-                          <Button
-                            variant={'outline'}
-                            className={cn(
-                              'w-full pl-3 text-left font-normal',
-                              !field.value && 'text-muted-foreground'
-                            )}
-                          >
-                            {field.value ? (
-                              format(new Date(field.value), 'PPP')
-                            ) : (
-                              <span>Pick a date</span>
-                            )}
-                            <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
-                          </Button>
-                        </FormControl>
-                      </PopoverTrigger>
-                      <PopoverContent className="w-auto p-0" align="start">
-                        <Calendar
-                          mode="single"
-                          selected={
-                            field.value ? new Date(field.value) : undefined
-                          }
-                          onSelect={(date) =>
-                            field.onChange(date?.toISOString())
-                          }
-                          disabled={(date) =>
-                            date > new Date() || date < new Date('1900-01-01')
-                          }
-                          initialFocus
+                        <Input
+                          name="title"
+                          type="text"
+                          id="title"
+                          placeholder="Title of your item"
+                          {...field}
                         />
-                      </PopoverContent>
-                    </Popover>
-                    <FormMessage>{errors.date_time?.message}</FormMessage>
-                  </FormItem>
-                )}
-              />
+                      </FormControl>
+                      <FormMessage>{errors.title?.message}</FormMessage>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Category Field */}
+                <FormField
+                  control={control}
+                  name="category"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Category</FormLabel>
+                      <Select
+                        onValueChange={field.onChange}
+                        defaultValue={field.value}
+                      >
+                        <FormControl>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a category" />
+                          </SelectTrigger>
+                        </FormControl>
+                        <SelectContent>
+                          <SelectGroup>
+                            <SelectLabel>Item Categories</SelectLabel>
+                            {categories.map((category) => (
+                              <SelectItem
+                                name="category"
+                                id="category"
+                                className="cursor-pointer"
+                                key={category}
+                                value={category}
+                              >
+                                {category}
+                              </SelectItem>
+                            ))}
+                          </SelectGroup>
+                        </SelectContent>
+                      </Select>
+                      <FormMessage>{errors.category?.message}</FormMessage>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Date Field */}
+                <FormField
+                  control={control}
+                  name="date_time"
+                  id="date_time"
+                  render={({ field }) => (
+                    <FormItem className="flex flex-col mt-3">
+                      <FormLabel>Date and Time</FormLabel>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <FormControl>
+                            <Button
+                              variant={'outline'}
+                              className={cn(
+                                'w-full pl-3 text-left font-normal',
+                                !field.value && 'text-muted-foreground'
+                              )}
+                            >
+                              {field.value ? (
+                                format(new Date(field.value), 'PPP')
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                              <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                            </Button>
+                          </FormControl>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={
+                              field.value ? new Date(field.value) : undefined
+                            }
+                            onSelect={(date) =>
+                              field.onChange(date?.toISOString())
+                            }
+                            disabled={(date) =>
+                              date > new Date() || date < new Date('1900-01-01')
+                            }
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                    </FormItem>
+                  )}
+                />
+              </div>
 
               {/* Last Viewed Location Field */}
               <FormField
@@ -315,49 +316,13 @@ const AddItemLose = () => {
                 )}
               />
 
-              {/* Contact Field */}
-              <FormField
-                control={control}
-                name="contact"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Detail Contact</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Input your contact" {...field} />
-                    </FormControl>
-                    <FormMessage>{errors.contact?.message}</FormMessage>
-                  </FormItem>
-                )}
-              />
-
-              {/* Reward Field */}
-              <FormField
-                control={control}
-                name="reward"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Reward (Optional)</FormLabel>
-                    <FormControl>
-                      <Input placeholder="Enter reward (optional)" {...field} />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-
-              {/* Map Component */}
-              <div className="rounded-lg">
-                <Label className="mb-2">Pick Location on Map:</Label>
-                <InteractiveMap location={location} setLocation={setLocation} />
-              </div>
-
-              {/* File Upload */}
               <FormField
                 control={control}
                 name="images"
                 render={() => (
                   <FormItem>
                     <FormLabel className="text-sm font-medium">
-                      Choose Files
+                      Choose Images
                     </FormLabel>
                     <FormControl>
                       <Input
@@ -371,6 +336,45 @@ const AddItemLose = () => {
                   </FormItem>
                 )}
               />
+              <div className='grid grid-cols-2 gap-5'>
+                {/* Contact Field */}
+                <FormField
+                  control={control}
+                  name="contact"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Detail Contact</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Input your contact" {...field} />
+                      </FormControl>
+                      <FormMessage>{errors.contact?.message}</FormMessage>
+                    </FormItem>
+                  )}
+                />
+
+                {/* Reward Field */}
+                <FormField
+                  control={control}
+                  name="reward"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Reward (Optional)</FormLabel>
+                      <FormControl>
+                        <Input placeholder="Enter reward (optional)" {...field} />
+                      </FormControl>
+                    </FormItem>
+                  )}
+                />
+              </div>
+
+              {/* Map Component */}
+              <div className="rounded-lg">
+                <Label className="mb-2">Pick Location on Map:</Label>
+                <InteractiveMap location={location} setLocation={setLocation} />
+              </div>
+
+              {/* File Upload */}
+              
 
               {isUploading && (
                 <div className="mt-4">
@@ -402,22 +406,24 @@ const AddItemLose = () => {
                   <AlertDescription>{uploadStatus.message}</AlertDescription>
                 </Alert>
               )}
-              <Button
-                type="submit"
-                onClick={() => {
-                  handleSubmit(onSubmit(addMissingItemForm.getValues()));
-                  console.log('values', addMissingItemForm.getValues());
-                }}
-              >
-                {isSubmitting ? (
-                  <>
-                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                    Please wait
-                  </>
-                ) : (
-                  'Post Item'
-                )}
-              </Button>
+              <div className='flex justify-end'>
+                <Button
+                  type="submit"
+                  onClick={() => {
+                    handleSubmit(onSubmit(addMissingItemForm.getValues()));
+                    console.log('values', addMissingItemForm.getValues());
+                  }}
+                >
+                  {isSubmitting ? (
+                    <>
+                      <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                      Please wait
+                    </>
+                  ) : (
+                    'Post Item'
+                  )}
+                </Button>
+              </div>
             </form>
           </Form>
           <CardFooter className="justify-end"></CardFooter>

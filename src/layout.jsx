@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './components/header/Header';
+import Header from './components/Header/Header.jsx';
 import { useAuth } from './context/AuthContext';
 
 const Layout = ({ children, withHeader = false }) => {
