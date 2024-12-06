@@ -1,6 +1,6 @@
-import { useEffect, useState } from 'react';
-import MissingItemCard from '@/components/MissingItemCard';
-import { Input } from '@/components/ui/input';
+import { useEffect, useState } from "react";
+import MissingItemCard from "@/components/MissingItemCard";
+import { Input } from "@/components/ui/input";
 import {
   Pagination,
   PaginationContent,
@@ -9,20 +9,20 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-} from '@/components/ui/pagination';
-import { Button } from '@/components/ui/button';
+} from "@/components/ui/pagination";
+import { Button } from "@/components/ui/button";
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@/components/ui/select';
-import { Plus, Search } from 'lucide-react';
+} from "@/components/ui/select";
+import { Plus, Search } from "lucide-react";
 
-import categories from '@/assets/data/categories';
-import Loading from '@/components/Loading';
-import { Link } from 'react-router-dom';
+import categories from "@/assets/data/categories";
+import Loading from "@/components/Loading";
+import { Link } from "react-router-dom";
 
 const Browse = () => {
   const [datas, setDatas] = useState([]);
@@ -32,20 +32,20 @@ const Browse = () => {
   const [loadingLocations, setLoadingLocations] = useState(true);
 
   // State untuk pencarian
-  const [searchQuery, setSearchQuery] = useState('');
-  const [selectedLocation, setSelectedLocation] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLocation, setSelectedLocation] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const fetchData = async () => {
     try {
       const response = await fetch(
-        'https://cari-barengbackend-production.up.railway.app/missings'
+        "https://cari-barengbackend-production.up.railway.app/missings?status=missing"
       );
       const raw_data = await response.json();
       setDatas(raw_data.data || []);
       setAllData(raw_data.data || []); // Simpan data asli
     } catch (error) {
-      console.error('Error fetching data:', error);
+      console.error("Error fetching data:", error);
     } finally {
       setLoadingData(false);
     }
@@ -59,10 +59,10 @@ const Browse = () => {
       relation["admin_level"="5"](area.searchArea);
       out tags;
       `;
-      const response = await fetch('https://overpass-api.de/api/interpreter', {
-        method: 'POST',
+      const response = await fetch("https://overpass-api.de/api/interpreter", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded',
+          "Content-Type": "application/x-www-form-urlencoded",
         },
         body: `data=${encodeURIComponent(query)}`,
       });
@@ -72,7 +72,7 @@ const Browse = () => {
         .map((element) => element.tags.name);
       setLocations(locationNames);
     } catch (error) {
-      console.error('Error fetching locations:', error);
+      console.error("Error fetching locations:", error);
     } finally {
       setLoadingLocations(false);
     }
@@ -88,9 +88,8 @@ const Browse = () => {
       // Filter data berdasarkan input
       const filteredData = allData.filter(
         (item) =>
-          (!searchQuery ||
-            item.title.toLowerCase().includes(searchQuery.toLowerCase())) &&
-          (!selectedLocation || item.last_viewed === selectedLocation) &&
+          (!searchQuery || item.title.toLowerCase().includes(searchQuery.toLowerCase())) &&
+          (!selectedLocation || item.location.toLowerCase().includes(selectedLocation.toLowerCase())) &&
           (!selectedCategory || item.category === selectedCategory)
       );
 
@@ -98,9 +97,9 @@ const Browse = () => {
     }
 
     // Kosongkan inputan
-    setSearchQuery('');
-    setSelectedLocation('');
-    setSelectedCategory('');
+    setSearchQuery("");
+    setSelectedLocation("");
+    setSelectedCategory("");
     setLoadingData(false);
   };
 
@@ -109,7 +108,7 @@ const Browse = () => {
     fetchLocations();
   }, []);
 
-  console.log(datas);
+  console.log(datas)
 
   return (
     <div className="pt-10 px-5 md:px-20 xl:px-40">
@@ -162,14 +161,14 @@ const Browse = () => {
 
       {/* List of Posts */}
       <h3 className="mb-8 text-2xl font-semibold text-gray-700">Lost Items</h3>
-      <div className="flex justify-end mb-5">
-        <Link to="/post-item">
-          <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
-            <Plus />
-            <span>Add Item</span>
-          </Button>
-        </Link>
-      </div>
+      <div className='flex justify-end mb-5'>
+            <Link to="/post-item">
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                <Plus />
+                <span>Add Item</span>
+              </Button>
+            </Link>
+          </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {loadingData ? (
           <Loading />

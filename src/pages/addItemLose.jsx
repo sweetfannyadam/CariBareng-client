@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
@@ -63,7 +57,6 @@ const AddItemLose = () => {
   const routeLocation = useLocation();
   const pathname = routeLocation.pathname;
 
-  // Main Form for Missing Item
   const addMissingItemForm = useForm({
     resolver: zodResolver(addMissingItemFormSchema),
     defaultValues: {
@@ -126,7 +119,7 @@ const AddItemLose = () => {
       console.log('Response:', response);
       setUploadStatus({
         type: 'success',
-        message: 'Item posted successfully!',
+        message: 'File uploaded successfully!',
       });
       toast({
         title: 'Success',
@@ -380,11 +373,20 @@ const AddItemLose = () => {
               />
 
               {isUploading && (
-                <Progress value={uploadProgress} className="w-full" />
+                <div className="mt-4">
+                  <Progress value={uploadProgress} className="w-full" />
+                  <p
+                    className="text-sm text-center mt-2"
+                    style={{ color: '#2C3E50' }}
+                  >
+                    Uploading: {uploadProgress}%
+                  </p>
+                </div>
               )}
 
               {uploadStatus && (
                 <Alert
+                  className="mt-4"
                   variant={
                     uploadStatus.type === 'success' ? 'default' : 'destructive'
                   }

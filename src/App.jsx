@@ -5,7 +5,8 @@ import Layout from './layout.jsx';
 // pages
 import Home from './pages/Home.jsx';
 import Auth from './pages/Auth.jsx';
-import Browse from './pages/Browse.jsx';
+import MissingBrowse from './pages/MissingBrowse.jsx';
+import FoundBrowse from './pages/FoundBrowse.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import AboutUs from './pages/aboute-us/AboutUs.jsx';
 import Contact from './pages/contact/Contact.jsx';
@@ -42,10 +43,18 @@ function App() {
           }
         />
         <Route
-          path="/browse"
+          path="/browse-missing"
           element={
             <Layout withHeader={true}>
-              <Browse />
+              <MissingBrowse />
+            </Layout>
+          }
+        />
+        <Route
+          path="/browse-found"
+          element={
+            <Layout withHeader={true}>
+              <FoundBrowse />
             </Layout>
           }
         />

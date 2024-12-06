@@ -38,7 +38,6 @@ const Profile = () => {
 
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
-
   return (
     <>
       <section className="flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10">
@@ -56,7 +55,7 @@ const Profile = () => {
           <div id="profile_info" className="text-2xl flex flex-col gap-3">
             <p>{user?.fullname || 'Loading...'}</p>
             <p>{user?.gmail || 'Loading...'}</p>
-            <p>{user?.about_me || 'Ceritakan tentang Anda'}</p>
+            <p className='text-lg'>{user?.about_me || 'Ceritakan tentang Anda'}</p>
             <Link to="/profile/edit">
               <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
                 Edit Profile
@@ -89,7 +88,7 @@ const Profile = () => {
                   id={data.id}
                   title={data.title}
                   category={data.category}
-                  image={data.image}
+                  images={data.images}
                   status={data.status}
                 />
               ))}
