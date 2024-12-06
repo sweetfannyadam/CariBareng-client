@@ -57,13 +57,10 @@ const EditProfile = () => {
   const editProfileForm = useForm({
     resolver: zodResolver(editProfileFormSchema),
     defaultValues: {
-      // fullname: '',
-      // username: '',
-      // gmail: '',
-      // no_hp: '',
       fullname: user?.fullname || '',
-
       no_hp: user?.no_hp || '',
+      gender: user?.gender || '',
+      about_me: user?.about_me || '',
     },
   });
 
@@ -80,18 +77,17 @@ const EditProfile = () => {
     try {
       const payload = {
         fullname: values.fullname,
-        // username: values.username,
-        // gmail: values.gmail,
         no_hp: values.no_hp,
+        gender: values.gender,
+        about_me: values.about_me,
       };
 
       const response = await updateUser(token, payload);
+      console.log('response', response);
       toast({
         variant: 'default',
         description: 'Profile updated',
       });
-
-      navigate('/profile');
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -100,6 +96,7 @@ const EditProfile = () => {
       });
     } finally {
       setIsLoading(false);
+      navigate('/profile');
     }
   };
 
@@ -282,42 +279,7 @@ const EditProfile = () => {
                 </FormItem>
               )}
             />
-            <FormField
-              control={editProfileForm.control}
-              name="username"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel>Username</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="username"
-                      type="text"
-                      placeholder="Choose a username"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={editProfileForm.control}
-              name="gmail"
-              render={({ field }) => (
-                <FormItem className="space-y-1">
-                  <FormLabel>Email</FormLabel>
-                  <FormControl>
-                    <Input
-                      id="gmail"
-                      type="email"
-                      placeholder="Enter your email address"
-                      {...field}
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
+
             <FormField
               control={editProfileForm.control}
               name="no_hp"
@@ -329,6 +291,43 @@ const EditProfile = () => {
                       id="phone"
                       type="tel"
                       placeholder="Enter your phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={editProfileForm.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="gender"
+                      type="text"
+                      placeholder="Enter your gender"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={editProfileForm.control}
+              name="about_me"
+              render={({ field }) => (
+                <FormItem className="space-y-1">
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <Input
+                      id="about_me"
+                      type="textarea"
+                      placeholder="Tell us about yourself"
                       {...field}
                     />
                   </FormControl>
