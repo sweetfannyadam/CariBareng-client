@@ -9,7 +9,7 @@ import MissingBrowse from './pages/MissingBrowse.jsx';
 import FoundBrowse from './pages/FoundBrowse.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import AboutUs from './pages/aboute-us/AboutUs.jsx';
-import Contact from './pages/contact/Contact.jsx';
+import Contact from './pages/contact/contact.jsx';
 import AddItemLose from './pages/addItemLose.jsx';
 import Profile from './pages/profile/Profile.jsx';
 import Edit from './pages/profile/EditProfile.jsx';
