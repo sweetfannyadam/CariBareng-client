@@ -130,7 +130,7 @@ const FoundThisItem = ({ missingItem }) => {
       </DrawerTrigger>
 
       <DrawerContent>
-        <div className="mx-auto w-full max-w-sm">
+        <div className="px-5 md:px-0 md:mx-auto w-full max-w-sm">
           <button
             onClick={toggleDrawer}
             className="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition"

@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import MapComponent from '@/components/MapComponent';
 import { Label } from '@/components/ui/label';
 import Loading from '@/components/Loading';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import FoundThisItem from '@/components/FoundThisItem';
 import { Edit } from 'lucide-react';
@@ -21,9 +21,16 @@ import { useAuth } from '@/context/AuthContext';
 const DetailMissingItemCard = () => {
   const [datas, setData] = useState(null);
   const { id } = useParams();
-  const { user, token } = useAuth();
+  const { user, token } = useAuth(null);
+  const navigate = useNavigate()
+
 
   useEffect(() => {
+    if (!user) {
+      navigate('/auth'); // Ganti "/auth" dengan path halaman login Anda
+      return;
+    }
+
     const getData = async () => {
       const response = await fetch(
         'https://cari-barengbackend-production.up.railway.app/missings/' + id
@@ -40,7 +47,7 @@ const DetailMissingItemCard = () => {
       {datas ? (
         <div className="flex flex-col lg:flex-row gap-10">
           {datas.missing_images.length > 0 ? (
-          <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-72 2xl:mb-44 rounded-xl shadow-xl">
+          <Carousel className="relative bg-primary p-2 lg:mb-[29rem] xl:mb-52 2xl:mb-44 rounded-xl shadow-xl">
             <CarouselContent className="h-[350px] lg:w-[350px] lg:h-[250px] xl:w-[500px] xl:h-[400px] flex items-center">
               {datas.missing_images.map((_, index) => (
                 <CarouselItem  key={index}>
@@ -53,7 +60,7 @@ const DetailMissingItemCard = () => {
                 ))}
             </CarouselContent>
             <div className="mt-20 lg:hidden"></div>
-            <div className="flex justify-center ml-[9%] lg:-mt-14 xl:-mt-10 relative">
+            <div className="flex justify-center ml-[9%] lg:-mt-14 xl:-mt-16 2xl:mt-10 relative">
               <div>
                 <CarouselPrevious className='px-10 rounded-xl -top-12 lg:top-20 -left-5' />
                 <CarouselNext className="px-10 rounded-xl -top-12 left-56 md:left-[32rem] lg:top-20 lg:left-52 xl:left-80 xl:ml-3" />
@@ -65,15 +72,15 @@ const DetailMissingItemCard = () => {
               <p className="text-gray-500">No images available</p>
             </div>
           )}
-          <div className="mt-5 flex-col flex gap-5 text-xl w-full">
+          <div className="mt-5 flex-col flex gap-5 text-base w-full">
             <div className="grid md:grid-flow-col gap-10">
               <div className="flex flex-col gap-5">
                 <p className="font-semibold">
                   Item Categories: {datas.category}
                 </p>
-                <h1 className="text-3xl">{datas.title}</h1>
-                <p className="text-2xl font-bold">Reward: {datas.reward}</p>
-                <p>Date : {datas.date_time}</p>
+                <h1 className="text-2xl 2xl:text-3xl">{datas.title}</h1>
+                <p className="text-xl 2xl:text-2xl font-bold">Reward: {datas.reward}</p>
+                <p >Date : {datas.date_time}</p>
                 <hr className="text-primary" />
                 <p>{datas.description}</p>
               </div>

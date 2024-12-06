@@ -53,15 +53,17 @@ const Profile = () => {
             withBorder={true}
             className="h-40 w-40 border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
           />
-          <div id="profile_info" className="text-2xl flex flex-col gap-3 -translate-x-[35%] md:-translate-x-0">
-            <p>{user?.fullname || 'Loading...'}</p>
-            <p>{user?.gmail || 'Loading...'}</p>
-            <p className='text-lg'>{user?.about_me || 'Ceritakan tentang Anda'}</p>
-            <Link to="/profile/edit">
-              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
-                Edit Profile
-              </Button>
-            </Link>
+          <div id="profile_info" className="text-2xl w-full grid">
+            <div className='flex flex-col gap-3'>  
+              <p>{user?.fullname || 'Loading...'}</p>
+              <p>{user?.gmail || 'Loading...'}</p>
+              <p className='text-lg'>{user?.about_me || 'Ceritakan tentang Anda'}</p>
+              <Link to="/profile/edit">
+                <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                  Edit Profile
+                </Button>
+              </Link>
+            </div>
           </div>
         </div>
       </section>

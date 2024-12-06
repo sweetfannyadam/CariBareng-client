@@ -64,7 +64,7 @@ export default function MissingItemCard({id, title, category, images = [], statu
           <div className="mt-4 flex justify-end gap-2">
             {/* link detail */}
             <Link to={`/missing-items/${id}`}>
-              <Button className="bg-primary-foreground text-primary px-10 shadow-xl hover:bg-primary border-2 hover:text-primary-foreground border-primary-foreground">
+              <Button className="bg-primary-foreground text-primary px-5 shadow-xl hover:bg-primary border-2 hover:text-primary-foreground border-primary-foreground">
                 View
               </Button>
             </Link>
