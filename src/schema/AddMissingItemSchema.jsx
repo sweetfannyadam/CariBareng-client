@@ -33,6 +33,10 @@ export const addMissingItemFormSchema = z.object({
     .max(100, {
       message: 'Description should not exceed 100 characters.',
     }),
+  images: z
+    .array(z.any())
+    .min(1, { message: 'Please upload at least 1 image.' })
+    .max(3, { message: 'You can upload a maximum of 3 images.' }),
   contact: z.string({
     required_error: 'Contact is required.',
     message: 'Please enter a valid contact number.',
@@ -48,30 +52,4 @@ export const addMissingItemFormSchema = z.object({
     .max(15, {
       message: 'Reward should not exceed 15 characters.',
     }),
-  image: z
-    .array(z.any())
-    .min(1, { message: 'Please upload at least 1 image.' })
-    .max(3, { message: 'You can upload a maximum of 3 images.' }),
-  location: z.object({
-    lat: z
-      .string({
-        required_error: 'Location is required.',
-      })
-      .min(3, {
-        message: 'Location should be at least 3 characters long.',
-      })
-      .max(15, {
-        message: 'Location should not exceed 15 characters.',
-      }),
-    lng: z
-      .string({
-        required_error: 'Location is required.',
-      })
-      .min(3, {
-        message: 'Location should be at least 3 characters long.',
-      })
-      .max(15, {
-        message: 'Location should not exceed 15 characters.',
-      }),
-  }),
 });

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { fetchUserMissingItems } from '../../utils/user';
 import { Plus } from 'lucide-react';
+import { Avatar } from '@material-tailwind/react';
 
 const Profile = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
@@ -18,7 +19,6 @@ const Profile = () => {
       if (isAuthenticated && token) {
         try {
           const data = await fetchUserMissingItems(token);
-          console.log('Data:', data);
           if (
             data?.status === 'fail' &&
             data?.message?.toLowerCase().includes('token tidak valid')
@@ -39,8 +39,6 @@ const Profile = () => {
 
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
-
-
   return (
     <>
       <section className="flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10">
@@ -56,7 +54,9 @@ const Profile = () => {
             <p>{user?.gmail || 'Loading...'}</p>
             <p className='text-lg'>{user?.about_me || 'Ceritakan tentang Anda'}</p>
             <Link to="/profile/edit">
-              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">Edit Profile</Button>
+              <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
+                Edit Profile
+              </Button>
             </Link>
           </div>
         </div>
@@ -71,7 +71,7 @@ const Profile = () => {
           <h3 className="mb-8 text-2xl font-semibold text-700">
             My Missing Items
           </h3>
-          <div className='flex justify-end mb-5'>
+          <div className="flex justify-end mb-5">
             <Link to="/post-item">
               <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
                 <Plus />

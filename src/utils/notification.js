@@ -34,7 +34,8 @@ export const fetchNotification = async (token, id) => {
     const response = await axiosInstance.get(`/notifications/${id}`, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return response.data.data;
+    console.log('Notification details utils:', response);
+    return response;
   } catch (error) {
     console.error('Error fetching notification:', error);
   }

@@ -35,6 +35,7 @@ import { BarLoader } from 'react-spinners';
 import { AlertCircle, CheckCircle2, Loader2 } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { Progress } from '@/components/ui/progress';
+import { Avatar } from '@material-tailwind/react';
 
 const EditProfile = () => {
   const {
