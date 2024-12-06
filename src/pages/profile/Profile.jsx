@@ -11,6 +11,7 @@ const Profile = () => {
   const { user, token, logout, isAuthenticated } = useAuth();
   const [userMissingItems, setUserMissingItems] = useState([]);
   const navigate = useNavigate();
+  
 
   // Fetch user missing items
   useEffect(() => {
@@ -37,6 +38,8 @@ const Profile = () => {
 
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
+
+  console.log(user)
 
   return (
     <>

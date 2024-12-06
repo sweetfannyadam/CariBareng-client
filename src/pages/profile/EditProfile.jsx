@@ -83,7 +83,6 @@ const EditProfile = () => {
       };
 
       const response = await updateUser(token, payload);
-      console.log('response', response);
       toast({
         variant: 'default',
         description: 'Profile updated',
@@ -322,7 +321,7 @@ const EditProfile = () => {
               name="about_me"
               render={({ field }) => (
                 <FormItem className="space-y-1">
-                  <FormLabel>Gender</FormLabel>
+                  <FormLabel>About Me</FormLabel>
                   <FormControl>
                     <Input
                       id="about_me"
