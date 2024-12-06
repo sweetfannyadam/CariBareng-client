@@ -1,14 +1,20 @@
-import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { useEffect, useState } from "react";
-import MapComponent from "@/components/MapComponent";
-import { Label } from "@/components/ui/label";
-import Loading from "@/components/Loading";
-import { Link, useParams } from "react-router-dom";
-import { Button } from "@/components/ui/button";
-import FoundThisItem from "@/components/FoundThisItem";
-import { Edit } from "lucide-react";
-import DeleteDrawer from "@/components/DeleteDrawer";
-import { useAuth } from "@/context/AuthContext";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from '@/components/ui/carousel';
+import { useEffect, useState } from 'react';
+import MapComponent from '@/components/MapComponent';
+import { Label } from '@/components/ui/label';
+import Loading from '@/components/Loading';
+import { Link, useParams } from 'react-router-dom';
+import { Button } from '@/components/ui/button';
+import FoundThisItem from '@/components/FoundThisItem';
+import { Edit } from 'lucide-react';
+import DeleteDrawer from '@/components/DeleteDrawer';
+import { useAuth } from '@/context/AuthContext';
 
 // Adjust the import path as needed
 
@@ -16,12 +22,14 @@ const DetailMissingItemCard = () => {
   const [datas, setData] = useState(null);
   const { id } = useParams();
   const { user, token } = useAuth();
-  
+
   useEffect(() => {
     const getData = async () => {
-      const response = await fetch("https://cari-barengbackend-production.up.railway.app/missings/" + id);
+      const response = await fetch(
+        'https://cari-barengbackend-production.up.railway.app/missings/' + id
+      );
       const dataJson = await response.json();
-      const data = dataJson.data
+      const data = dataJson.data;
       setData(data);
     };
     getData();
@@ -41,7 +49,7 @@ const DetailMissingItemCard = () => {
                       src={_.image_url}
                       alt={datas.title}
                     />
-                </CarouselItem>
+                  </CarouselItem>
                 ))}
             </CarouselContent>
             <div className="mt-20 lg:hidden"></div>
@@ -60,7 +68,9 @@ const DetailMissingItemCard = () => {
           <div className="mt-5 flex-col flex gap-5 text-xl w-full">
             <div className="grid md:grid-flow-col gap-10">
               <div className="flex flex-col gap-5">
-                <p className="font-semibold">Item Categories: {datas.category}</p>
+                <p className="font-semibold">
+                  Item Categories: {datas.category}
+                </p>
                 <h1 className="text-3xl">{datas.title}</h1>
                 <p className="text-2xl font-bold">Reward: {datas.reward}</p>
                 <p>Date : {datas.date_time}</p>
@@ -69,32 +79,60 @@ const DetailMissingItemCard = () => {
               </div>
               <div className="grid gap-5 mt-5">
                 <div className="flex flex-col gap-3 bg-primary text-white p-5 rounded-lg">
-                  <Label>Missing Person : <span className="font-bold text-lg">{datas.users.username}</span></Label>
-                  <Label>City : <span className="font-bold text-lg">{datas.cordinate}</span></Label>
-                  <Label>Reward : <span className="font-bold text-lg">{datas.reward}</span></Label>
-                  <Label>Status : <span className="font-bold text-lg">{datas.status}</span></Label>
+                  <Label>
+                    Missing Person :{' '}
+                    <span className="font-bold text-lg">
+                      {datas.users.username}
+                    </span>
+                  </Label>
+                  <Label>
+                    City :{' '}
+                    <span className="font-bold text-lg">{datas.cordinate}</span>
+                  </Label>
+                  <Label>
+                    Reward :{' '}
+                    <span className="font-bold text-lg">{datas.reward}</span>
+                  </Label>
+                  <Label>
+                    Status :{' '}
+                    <span className="font-bold text-lg">{datas.status}</span>
+                  </Label>
                 </div>
                 <div className="w-full grid grid-flow-col content-center gap-5">
                   {user.id === datas.user_id ? (
                     <>
-                      <Button
-                        className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg"
-                      >
+                      <Button className="bg-primary-foreground text-primary hover:text-primary-foreground hover:bg-primary border-2 border-primary-foreground py-[1.13rem] w-full shadow-lg">
                         <Link to="/edit-item">
-                          <Edit className="h-4 w-4" id={datas.id} title="aku orang" category={datas.category} reward={datas.reward} date={datas.date_time} description={datas.description} lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
+                          <Edit
+                            className="h-4 w-4"
+                            id={datas.id}
+                            title="aku orang"
+                            category={datas.category}
+                            reward={datas.reward}
+                            date={datas.date_time}
+                            description={datas.description}
+                            lat={datas.locations[0].lat}
+                            lng={datas.locations[0].lng}
+                          />
                         </Link>
                       </Button>
                       <DeleteDrawer id={datas.id} />
                     </>
                   ) : (
-                    <FoundThisItem title={datas.title} token={token} target={datas.users.username} />
+                    <FoundThisItem missingItem={datas} token={token} />
                   )}
                 </div>
               </div>
             </div>
             <div className="mt-5 border-2 border-primary p-5 rounded-xl shadow-xl mb-20">
-                <p className="mb-2">Was last seen : <span className="font-bold">{datas.last_viewed}</span></p>
-                <MapComponent lat={datas.locations[0].lat} lng={datas.locations[0].lng} />
+              <p className="mb-2">
+                Was last seen :{' '}
+                <span className="font-bold">{datas.last_viewed}</span>
+              </p>
+              <MapComponent
+                lat={datas.locations[0].lat}
+                lng={datas.locations[0].lng}
+              />
             </div>
           </div>
         </div>

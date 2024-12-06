@@ -160,15 +160,7 @@ const Browse = () => {
       </div>
 
       {/* List of Posts */}
-      <h3 className="mb-8 text-2xl font-semibold text-gray-700">Lost Items</h3>
-      <div className="flex justify-end mb-5">
-        <Link to="/post-item">
-          <Button className="bg-primary text-primary-foreground  border-2 border-primary hover:bg-primary-foreground hover:text-primary">
-            <Plus />
-            <span>Add Item</span>
-          </Button>
-        </Link>
-      </div>
+      <h3 className="mb-8 text-2xl font-semibold text-gray-700">Found Items</h3>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-4 gap-4">
         {loadingData ? (
           <Loading />

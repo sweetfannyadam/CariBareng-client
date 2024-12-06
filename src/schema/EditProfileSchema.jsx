@@ -1,25 +1,15 @@
 import { z } from 'zod';
 
 export const editProfileFormSchema = z.object({
-  username: z
+  fullname: z
     .string({
-      required_error: 'Username is required.',
-      message: 'Username should be at least 3 characters long.',
+      required_error: 'Fullname is required.',
+      message: 'Fullname should only contain letters and spaces.',
     })
     .min(3, {
-      message: 'Username should be at least 3 characters long.',
-    })
-    .max(15, {
-      message: 'Username should not exceed 15 characters.',
+      message: 'Fullname should be at least 3 characters long.',
     }),
-  gmail: z
-    .string({
-      required_error: 'Email is required.',
-      message: 'Email should be a valid email.',
-    })
-    .email({
-      message: 'Please enter a valid email address (e.g., name@example.com).',
-    }),
+
   no_hp: z
     .string({
       required_error: 'Phone number is required.',
@@ -30,6 +20,19 @@ export const editProfileFormSchema = z.object({
     })
     .max(15, {
       message: 'Please enter a valid phone number.',
+    }),
+  gender: z.string({
+    message: 'Please enter a gender.',
+  }),
+  about_me: z
+    .string({
+      required_error: 'About me is required.',
+    })
+    .min(3, {
+      message: 'About me should be at least 3 characters long.',
+    })
+    .max(100, {
+      message: 'About me should not exceed 100 characters.',
     }),
 });
 
