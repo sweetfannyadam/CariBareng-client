@@ -50,9 +50,8 @@ const Profile = () => {
               `https://avatar.iran.liara.run/username?username=${user.fullname}]`
             }
             alt="avatar"
-            size="xxl"
             withBorder={true}
-            className="border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
+            className="h-40 w-40 border border-blue-gray-500 shadow-xl shadow-blue-gray-900/20 ring-4 ring-blue-gray-500/30"
           />
           <div id="profile_info" className="text-2xl flex flex-col gap-3 -translate-x-[35%] md:-translate-x-0">
             <p>{user?.fullname || 'Loading...'}</p>
