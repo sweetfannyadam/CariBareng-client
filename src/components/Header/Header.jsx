@@ -8,8 +8,6 @@ import { useAuth } from '../../context/AuthContext';
 const Header = () => {
   const { isAuthenticated, user } = useAuth();
   const isLoggedIn = isAuthenticated;
-  const location = useLocation();
-  const pathname = location.pathname;
 
   const [menuWidth, setMenuWidth] = useState('0');
 
