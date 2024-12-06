@@ -55,7 +55,6 @@ export default function Dashboard() {
     fetchUser();
   }, []);
 
-  console.log(user);
 
   return (
     <div className="pt-6 px-5 md:px-20 lg:px-40 mt-6">

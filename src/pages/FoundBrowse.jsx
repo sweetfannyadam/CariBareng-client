@@ -108,7 +108,6 @@ const Browse = () => {
     fetchLocations();
   }, []);
 
-  console.log(datas);
 
   return (
     <div className="pt-10 px-5 md:px-20 xl:px-10 2xl:px-40">

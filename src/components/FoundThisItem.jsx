@@ -82,17 +82,13 @@ const FoundThisItem = ({ missingItem }) => {
     });
 
     try {
-      console.log('Form Data: ', formData);
       const response = await createNotification(
         token,
         missingItem.users.username,
         formData
       );
 
-      // for (let [key, value] of formData.entries()) {
-      //   console.log(key, value);
-      // }
-      console.log('Response:', response);
+      
       navigate('/browse-missing');
     } catch (error) {
       console.error('Error creating notification:', error);
@@ -113,9 +109,7 @@ const FoundThisItem = ({ missingItem }) => {
   };
 
   const toggleDrawer = () => {
-    console.log('Toggle Drawer');
     setIsOpen(!isOpen); // Toggle the drawer state
-    console.log('Is Open: ', isOpen);
   };
 
   return (

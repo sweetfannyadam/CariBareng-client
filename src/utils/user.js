@@ -8,7 +8,6 @@ export const fetchUser = async (token) => {
     });
     if (!response.data.data) {
       await refreshToken(token);
-      console.log('Refreshed token');
     }
 
     return response.data.data;

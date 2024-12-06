@@ -59,7 +59,6 @@ const FoundThisItem = ({ title, token, username }) => {
         image: formData.image,
       };
       const createdItem = await createFoundItem(payload, token, username);
-      console.log('Item created:', createdItem);
     } catch (error) {
       console.error('Error during submission:', error);
       alert('Terjadi kesalahan saat memposting item.');

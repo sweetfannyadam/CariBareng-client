@@ -84,7 +84,6 @@ const AddItemLose = () => {
 
   const handleDateSelection = (date) => {
     setSelectedDate(date);
-    console.log('Selected date:', date);
   };
 
   const handleSelection = (value) => {
@@ -98,7 +97,6 @@ const AddItemLose = () => {
     }
 
     setSelectedCategory(value);
-    console.log('Selected category:', value);
   };
 
   const addMissingItemForm = useForm({
@@ -152,9 +150,6 @@ const AddItemLose = () => {
         },
         status: 'missing',
       };
-      console.log('Payload:', payload);
-      // const response = await createMissingItem(token, payload);
-      // console.log('Response:', response);
 
       setIsSubmitting(false);
       setUploadStatus({

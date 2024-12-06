@@ -27,48 +27,11 @@ const UserMenu = () => {
 
   const handleLogout = () => {
     logout();
-    console.log('Logged out');
     navigate('/auth');
   };
 
   return (
     <ul className="flex justify-between gap-5">
-      {/* <li>
-        <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
-          <div className={isDarkMode ? 'dark' : ''}>{children}</div>
-
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button
-                variant="outline"
-                size="icon"
-                className="focus-visible:outline-none focus-visible:ring-transparent"
-              >
-                <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
-                <Moon
-                  className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
-                  color="#86efac"
-                />
-                <span className="sr-only">Toggle theme</span>
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem
-                onClick={() => console.log('Light theme')}
-                className="dark:text-green-300"
-              >
-                Light
-              </DropdownMenuItem>
-              <DropdownMenuItem
-                onClick={() => console.log('Dark theme')}
-                className="dark:text-green-300"
-              >
-                Dark
-              </DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        </div>
-      </li> */}
       <li>
         <div className="group flex items-center text-gray-700 transition-colors duration-300 ease-in-out hover:text-black cursor-pointer">
           <DropdownMenu>
