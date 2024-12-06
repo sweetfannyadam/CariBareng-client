@@ -25,11 +25,9 @@ function App() {
         <Route
           path="/"
           element={
-            <GuestRoute>
               <Layout withHeader={true}>
                 <Home />
               </Layout>
-            </GuestRoute>
           }
         />
         <Route

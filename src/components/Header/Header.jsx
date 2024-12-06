@@ -17,7 +17,7 @@ const Header = () => {
   const closeHamburger = () => setMenuWidth('0');
 
   return (
-      <header className="border mb-20">
+      <header className="border-primary border mb-20">
         <div className='fixed md:block bg-primary w-full px-5 md:px-10 py-5 z-50'>
           <div className='flex justify-between'>
             <img src="../caribareng.png" alt="logo cari bareng" className="md:hidden w-20 mr-10 shadow-md bg-white p-2 rounded-t-2xl rounded-l-2xl" />
@@ -62,7 +62,7 @@ const Header = () => {
           {/* Navigation bar untuk layar besar */}
           <nav className="hidden md:flex justify-between items-center text-base md:text-xl font-bold">
             <NavLinks />
-            {pathname !== '/' && isLoggedIn ? <UserMenu /> : <AuthButtons />}
+            {isLoggedIn ? <UserMenu /> : <AuthButtons />}
           </nav>
 
         </div>
