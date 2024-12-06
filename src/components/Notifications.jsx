@@ -55,7 +55,6 @@ export function Notifications({ className, ...props }) {
     });
   };
 
-  console.log('Notifications:', notifications);
 
   return (
     <Card className={cn('border-none mr-20 w-full', className)} {...props}>
@@ -90,7 +89,6 @@ export function Notifications({ className, ...props }) {
                   <Button
                     className="w-full mt-4 bg-[#89A8B2] hover:bg-[#5D7A8C] text-white"
                     onClick={() => {
-                      console.log('Selected notification:', notification);
                       setSelectedNotification(notification);
                     }}
                   >

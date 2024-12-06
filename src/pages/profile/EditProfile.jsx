@@ -75,7 +75,6 @@ const EditProfile = () => {
   });
 
   const onSubmit = async (values) => {
-    console.log(values);
     setIsLoading(true);
 
     try {
@@ -87,8 +86,6 @@ const EditProfile = () => {
       };
 
       const response = await updateUser(token, payload);
-      console.log('Response:', response);
-      console.log('Payload:', payload);
       toast({
         variant: 'default',
         description: 'Profile updated',
@@ -124,8 +121,6 @@ const EditProfile = () => {
 
     try {
       const response = await uploadProfilePicture(token, formData);
-      console.log('image', image);
-      console.log('Response:', response);
       setUploadStatus({
         type: 'success',
         message: 'File uploaded successfully!',

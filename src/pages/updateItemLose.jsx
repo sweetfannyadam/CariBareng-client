@@ -81,7 +81,6 @@ const UpdateItemLose = ({ tableId }) => {
       };
 
       const response = await updateMissingItem(token, tableId, payload);
-      console.log('Response:', response);
 
       setIsLoading(false);
       setIsUploading(false);

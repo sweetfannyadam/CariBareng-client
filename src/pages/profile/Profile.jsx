@@ -22,7 +22,6 @@ const Profile = () => {
             data?.status === 'fail' &&
             data?.message?.toLowerCase().includes('token tidak valid')
           ) {
-            console.log('Token is not valid or has expired.');
             logout();
             navigate('/auth');
           } else {
@@ -39,7 +38,6 @@ const Profile = () => {
     loadUserMissingItems();
   }, [isAuthenticated, token, logout, navigate]);
 
-  console.log('userMissingItems:', userMissingItems)
   return (
     <>
       <section className="flex flex-col lg:flex-row items-center justify-between pt-20 px-5 lg:px-40 gap-10">

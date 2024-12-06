@@ -23,7 +23,6 @@ const DeleteDrawer = ({ id, token, onDeleted }) => {
     setLoading(true);
     try {
       await deleteMissingItem(token, id);
-      console.log(`Item with ID: ${id} deleted successfully`);
       navigate('/profile');
       if (onDeleted) onDeleted();
       setOpen(false); // Tutup Drawer setelah penghapusan berhasil

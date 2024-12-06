@@ -80,7 +80,6 @@ const AddItemLose = () => {
   } = addMissingItemForm;
 
   const onSubmit = async (values) => {
-    console.log('onSubmit: ', values);
     setIsUploading(true);
     setUploadStatus(null);
 
@@ -110,11 +109,7 @@ const AddItemLose = () => {
     }
 
     try {
-      for (let [key, value] of formData.entries()) {
-        console.log(key, value);
-      }
       const response = await createMissingItem(token, formData);
-      console.log('Response:', response);
       setUploadStatus({
         type: 'success',
         message: 'File uploaded successfully!',
@@ -151,7 +146,6 @@ const AddItemLose = () => {
   };
 
   const handleClose = () => {
-    console.log('Pathname: ', pathname);
     pathname !== '/browser-missing' ? navigate('/browse-missing') : navigate('/profile');
   };
 
@@ -411,7 +405,6 @@ const AddItemLose = () => {
                   type="submit"
                   onClick={() => {
                     handleSubmit(onSubmit(addMissingItemForm.getValues()));
-                    console.log('values', addMissingItemForm.getValues());
                   }}
                 >
                   {isSubmitting ? (

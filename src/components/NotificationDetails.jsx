@@ -44,7 +44,6 @@ export function NotificationModal({ notification, onClose }) {
         tableId: `${notificationDetails.notification.missing_id}`,
       };
       try {
-        console.log('Payload:', payload);
 
         const response = await axiosInstance.post(`/approve`, payload, {
           headers: {
@@ -52,7 +51,6 @@ export function NotificationModal({ notification, onClose }) {
           },
         });
 
-        console.log('Response:', response);
         toast({
           title: 'Notification Approved',
           description: 'The notification has been approved successfully',
@@ -62,15 +60,6 @@ export function NotificationModal({ notification, onClose }) {
       } catch (error) {
         console.error(error.response?.data || error.message);
       }
-      // try {
-      //   console.log('Payload:', payload);
-      //   const response = await approveMissingItem(token, payload);
-      //   console.log('Notification approved:', response);
-
-      //   onClose(); // Close the modal after approval
-      // } catch (error) {
-      //   console.error('Error approving notification:', error);
-      // }
     }
   };
 
@@ -145,7 +134,6 @@ export function NotificationModal({ notification, onClose }) {
           <Button
             onClick={() => {
               onClose();
-              console.log('Close button clicked');
             }}
           >
             Close
@@ -153,7 +141,6 @@ export function NotificationModal({ notification, onClose }) {
 
           <Button
             onClick={() => {
-              console.log('Approve button clicked');
               approveNotification();
               onClose();
             }}

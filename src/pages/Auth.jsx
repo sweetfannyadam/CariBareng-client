@@ -57,7 +57,6 @@ const Auth = () => {
   });
 
   const onSignUp = async (values) => {
-    console.log(values);
     setIsLoading(true);
 
     try {
@@ -108,11 +107,7 @@ const Auth = () => {
       const response = await axiosInstance.post('/login', payload);
 
       const { accessToken, refreshToken } = response.data.data;
-      console.log(
-        'This is accessToken and refreshToken: ',
-        accessToken,
-        refreshToken
-      );
+      
 
       login(accessToken, refreshToken);
 
