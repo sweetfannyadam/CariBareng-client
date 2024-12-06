@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
@@ -26,8 +26,11 @@ import { useAuth } from '@/context/AuthContext';
 import axiosInstance from '@/api/axios';
 import { useToast } from '@/hooks/use-toast';
 import { Toaster } from '@/components/ui/toaster';
+import { useLocation } from 'react-router-dom';
 
 const Auth = () => {
+  const location = useLocation();
+  const [activeTab, setActiveTab] = useState('signUp');
   const { login } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -56,6 +59,7 @@ const Auth = () => {
   const onSignUp = async (values) => {
     console.log(values);
     setIsLoading(true);
+
     try {
       const payload = {
         fullname: values.fullname,
@@ -66,13 +70,22 @@ const Auth = () => {
         confirm_password: values.confirm_password,
       };
 
+      if (payload.password !== payload.confirm_password) {
+        toast({
+          variant: 'destructive',
+          description: 'Password and confirm password do not match.',
+        });
+        return;
+      }
+
       const response = await axiosInstance.post('/register', payload);
 
       toast({
         variant: 'default',
         description: 'Account created successfully. Please login to continue.',
       });
-      navigate('/auth');
+
+      navigate('/auth', { state: { signUpSuccess: true }, replace: true });
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -103,7 +116,7 @@ const Auth = () => {
 
       login(accessToken, refreshToken);
 
-      navigate('/browse');
+      navigate('/browse-missing');
     } catch (error) {
       toast({
         variant: 'destructive',
@@ -117,10 +130,21 @@ const Auth = () => {
     }
   };
 
+  useEffect(() => {
+    if (location.state?.signUpSuccess) {
+      setActiveTab('login');
+    }
+  }, [location.state]);
+
   return (
     <>
       <div className="flex items-baseline justify-center min-h-screen mt-20">
-        <Tabs defaultValue="signUp" className="w-[400px]">
+        <Tabs
+          defaultValue="signUp"
+          value={activeTab}
+          onValueChange={setActiveTab}
+          className="w-[400px]"
+        >
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="signUp">Sign Up</TabsTrigger>
             <TabsTrigger value="login">Login</TabsTrigger>

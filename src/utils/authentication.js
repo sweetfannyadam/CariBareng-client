@@ -1,20 +1,24 @@
 import { jwtDecode } from 'jwt-decode';
-import axios from 'axios';
+import axiosInstance from '@/api/axios';
 
 // Function to decode the JWT token
 export const decodeToken = (token) => {
   try {
     return jwtDecode(token);
   } catch (error) {
-    console.log('This is token: ', token);
-    console.error('Error decoding token:', error);
+    console.error('Error decoding token:', error, '\nToken:', token);
     return null;
   }
 };
 
 // Function to get the current access token from localStorage
 export const getAccessToken = () => {
-  return localStorage.getItem('access_token');
+  return localStorage.getItem('accessToken');
+};
+
+// Function to store access token in localStorage
+export const setAccessToken = (token) => {
+  localStorage.setItem('accessToken', token);
 };
 
 // Function to get the current refresh token from cookies
@@ -23,19 +27,21 @@ export const getRefreshToken = () => {
     .split('; ')
     .find((row) => row.startsWith('refreshToken='));
   return refreshToken ? refreshToken.split('=')[1] : null;
-
-  // const cookies = document.cookie.split(';');
-  // cookies.forEach((cookie) => {
-  //   if (cookie.trim().startsWith('refreshToken=')) {
-  //     refreshToken = cookie.split('=')[1];
-  //   }
-  // });
-  // return refreshToken;
 };
 
-// Function to store access token in localStorage
-export const setAccessToken = (token) => {
-  localStorage.setItem('access_token', token);
+// Function to store refresh token in cookies
+export const setRefreshToken = (token) => {
+  document.cookie = `refreshToken=${token}; HttpOnly; Secure; Samsite=Strict; path=/`;
+};
+
+export const isTokenValid = (token) => {
+  if (!token) return false;
+  try {
+    const decoded = jwtDecode(token);
+    return decoded.exp * 1000 > Date.now();
+  } catch (error) {
+    return false;
+  }
 };
 
 // Function to set expiration time for access token
@@ -53,15 +59,19 @@ export const refreshToken = async () => {
   }
 
   try {
-    const response = await axios.post(
-      'https://cari-barengbackend-production.up.railway.app/token',
-      {},
-      { withCredentials: true }
-    );
+    const response = await axiosInstance.post('/token', { refreshToken });
     const { accessToken } = response.data.data;
+    setAccessToken(accessToken);
     return accessToken;
   } catch (error) {
     console.error('Error refreshing token:', error);
+    clearTokens();
     throw new Error('Failed to refresh token');
   }
+};
+
+export const clearTokens = () => {
+  localStorage.removeItem('accessToken');
+  document.cookie =
+    'refreshToken=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 };

@@ -1,10 +1,6 @@
 import React from 'react';
 import { Edit } from 'lucide-react';
-import {
-  Card,
-  CardContent,
-  CardFooter,
-} from '@/components/ui/card';
+import { Card, CardContent, CardFooter } from '@/components/ui/card';
 import Autoplay from 'embla-carousel-autoplay';
 import {
   Carousel,
@@ -18,7 +14,7 @@ import { Link } from 'react-router-dom';
 import DeleteDrawer from './DeleteDrawer';
 import MarkAsFoundDrawer from './MarkAsFoundDrawer';
 
-export default function MissingItemCard({ title = 'Unknown Title', category = 'Uncategorized', images = [] }) {
+export default function MissingItemCard({id, title, category, images = [], status, }) {
   const plugin = React.useRef(
     Autoplay({ delay: 2000, stopOnInteraction: true })
   );
@@ -60,22 +56,18 @@ export default function MissingItemCard({ title = 'Unknown Title', category = 'U
 
         {/* Card Footer */}
         <CardFooter className="bg-primary grid p-5 rounded-b-xl text-white">
+          <div className='flex justify-between'>
             <h3 className="font-semibold truncate">{title}</h3>
-            <p className="text-sm text-gray-100">{category}</p>
+            <p className='border-2 rounded-xl border-primary-foreground px-2'>{status}</p>
+          </div>
+          <p className="text-sm text-gray-100">{category}</p>
           <div className="mt-4 flex justify-end gap-2">
-            {/* Edit Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className="text-white hover:text-gray-200"
-            >
-              <Link to="/edit-item">
-                <Edit className="h-4 w-4" />
-              </Link>
-            </Button>
-
-            {/* Mark as Found */}
-            <MarkAsFoundDrawer />
+            {/* link detail */}
+            <Link to={`/missing-items/${id}`}>
+              <Button className="bg-primary-foreground text-primary px-5 shadow-xl hover:bg-primary border-2 hover:text-primary-foreground border-primary-foreground">
+                View
+              </Button>
+            </Link>
 
             {/* Delete */}
             <DeleteDrawer />

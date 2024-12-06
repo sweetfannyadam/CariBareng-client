@@ -9,9 +9,9 @@ const Home = () => {
         <div className='mt-5 lg:mt-0 xl:pr-20'>
           <h1 className="text-2xl md:text-4xl font-bold mb-3">Welcome to <span className='text-primary'>CariBareng</span></h1>
           <p className="md:text-lg mb-10">We are a platform that helps you find lost items and connect with people around you. With ease, you can report lost items and search for items that may have been found by someone else.</p>
-          <Link to="/browse">
+          <Link to="/browse-missing">
             <Button className="focus-visible:ring-transparent bg-primary hover:bg-primary-foreground hover:text-primary border border-primary" variant="default">
-            View Lost Items
+            View Missing Items
             </Button>
           </Link>
         </div>

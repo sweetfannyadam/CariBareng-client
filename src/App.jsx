@@ -5,15 +5,18 @@ import Layout from './layout.jsx';
 // pages
 import Home from './pages/Home.jsx';
 import Auth from './pages/Auth.jsx';
-import Browse from './pages/Browse.jsx';
+import MissingBrowse from './pages/MissingBrowse.jsx';
+import FoundBrowse from './pages/FoundBrowse.jsx';
 import Dashboard from './pages/dashboard/Dashboard.jsx';
 import AboutUs from './pages/aboute-us/AboutUs.jsx';
-import Contact from './pages/contact/Contact.jsx';
+import Contact from './pages/contact/contact.jsx';
 import AddItemLose from './pages/addItemLose.jsx';
 import Profile from './pages/profile/Profile.jsx';
-import Edit from './pages/profile/edit.jsx';
+import Edit from './pages/profile/EditProfile.jsx';
 import { GuestRoute } from './components/GuestRoute.jsx';
 import ProtectedRoute from './components/ProtectedRoute.jsx';
+import DetailMissingItemCard from './pages/DetailMissingItemCard.jsx';
+import UpdateItemLose from './pages/updateItemLose.jsx';
 
 function App() {
   return (
@@ -22,9 +25,9 @@ function App() {
         <Route
           path="/"
           element={
-            <Layout withHeader={true}>
-              <Home />
-            </Layout>
+              <Layout withHeader={true}>
+                <Home />
+              </Layout>
           }
         />
         <Route
@@ -38,10 +41,26 @@ function App() {
           }
         />
         <Route
-          path="/browse"
+          path="/browse-missing"
           element={
             <Layout withHeader={true}>
-              <Browse />
+              <MissingBrowse />
+            </Layout>
+          }
+        />
+        <Route
+          path="/browse-found"
+          element={
+            <Layout withHeader={true}>
+              <FoundBrowse />
+            </Layout>
+          }
+        />
+        <Route
+          path="/missing-items/:id"
+          element={
+            <Layout withHeader={true}>
+              <DetailMissingItemCard />
             </Layout>
           }
         />
@@ -56,11 +75,21 @@ function App() {
           }
         />
         <Route
-          path="/dashboard/post-item"
+          path="/post-item"
           element={
             <ProtectedRoute>
               <Layout>
                 <AddItemLose />
+              </Layout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/edit-item"
+          element={
+            <ProtectedRoute>
+              <Layout>
+                <UpdateItemLose />
               </Layout>
             </ProtectedRoute>
           }

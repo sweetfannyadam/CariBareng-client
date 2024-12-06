@@ -5,82 +5,69 @@ import {
   setTokenExpiration,
   getAccessToken,
   decodeToken,
-} from '@/utils/authUtils';
-import axiosInstance from '../api/axios';
+  isTokenValid,
+  setRefreshToken,
+  clearTokens,
+} from '@/utils/authentication';
+import { fetchUser } from '@/utils/user';
+import { toast } from '@/hooks/use-toast';
 
 const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [token, setToken] = useState(localStorage.getItem('token') || null);
+  const [token, setToken] = useState(
+    localStorage.getItem('accessToken') || null
+  );
+  const [isAuthenticated, setAuthenticated] = useState(!!token);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    const checkTokenExpiry = async () => {
+    const initAuth = async () => {
       const token = getAccessToken();
-
-      if (token) {
-        const decodedToken = decodeToken(token);
-        const expirationTime = localStorage.getItem('access_token_expiration');
-        const currentTime = Date.now();
-
-        if (currentTime > expirationTime) {
-          try {
-            const newToken = await refreshToken();
-            if (newToken) {
-              setAccessToken(newToken);
-              setTokenExpiration(decodedToken.exp);
-              setToken(newToken);
-            } else {
-              logout();
-              setToken(null);
-            }
-          } catch (error) {
-            console.error('Error refreshing token:', error);
-            logout();
-            setToken(null);
-          }
-        } else {
-          setToken(token);
+      if (token && isTokenValid(token)) {
+        try {
+          const userData = await fetchUser(token);
+          setUser(userData);
+          setAuthenticated(true);
+        } catch (error) {
+          console.error('Error fetching user:', error);
+          setAuthenticated(false);
+          logout();
         }
+      } else {
+        setAuthenticated(false);
       }
 
       setIsLoading(false);
     };
 
-    checkTokenExpiry();
+    initAuth();
   }, [token]);
 
-  const login = (userData, newToken) => {
+  // Authentication
+  const login = (newToken, refreshToken) => {
     setToken(newToken);
-    setUser(userData);
     setAccessToken(newToken);
+    setRefreshToken(refreshToken);
+    setAuthenticated(true);
+
     const decodedToken = decodeToken(newToken);
     setTokenExpiration(decodedToken.exp);
-  };
-
-  const fetchUser = async (token) => {
-    try {
-      const response = await axiosInstance.get('/users', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setUser(response.data);
-    } catch (error) {
-      console.error('Error fetching user:', error);
-    }
   };
 
   const logout = () => {
     setUser(null);
     setToken(null);
-    localStorage.removeItem('access_token');
+    clearTokens();
     localStorage.removeItem('access_token_expiration');
+    setAuthenticated(false);
   };
 
   return (
-    <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>
+    <AuthContext.Provider
+      value={{ user, token, isLoading, isAuthenticated, login, logout }}
+    >
       {children}
     </AuthContext.Provider>
   );

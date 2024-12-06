@@ -1,10 +1,10 @@
 import React from 'react';
-import Header from './components/header/Header';
+import Header from './components/Header/Header.jsx';
 import { useAuth } from './context/AuthContext';
 
 const Layout = ({ children, withHeader = false }) => {
-  const { user } = useAuth();
-  const isLoggedIn = user != null;
+  const { isAuthenticated } = useAuth;
+  const isLoggedIn = isAuthenticated;
 
   return (
     <div>

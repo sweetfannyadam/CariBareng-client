@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 
 const NavLinks = () => (
   <>
-    <img src="caribareng.png" alt="logo cari bareng" className="hidden lg:block w-20 mr-10 shadow-md bg-white p-2 rounded-t-2xl rounded-l-2xl" />
+    <img src="../caribareng.png" alt="logo cari bareng" className="hidden lg:block w-20 mr-10 shadow-md bg-white p-2 rounded-t-2xl rounded-l-2xl" />
     <ul className="flex-col flex-grow lg:flex-row gap-y-3 gap-x-10 flex justify-start">
       <li>
         <Link
@@ -35,6 +35,28 @@ const NavLinks = () => (
         >
           <span className="relative">
             Contact
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
+        </Link>
+      </li>
+      <li>
+        <Link
+          to="/browse-missing"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
+        >
+          <span className="relative">
+            Missing Items
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
+          </span>
+        </Link>
+      </li>
+      <li>
+        <Link
+          to="/browse-found"
+          className="group flex items-center text-popover transition-colors duration-300 ease-in-out hover:text-popover-foreground"
+        >
+          <span className="relative">
+            Found Items
             <span className="absolute bottom-0 left-0 w-full h-0.5 bg-popover-foreground transform origin-left scale-x-0 transition-transform duration-300 ease-in-out group-hover:scale-x-100"></span>
           </span>
         </Link>

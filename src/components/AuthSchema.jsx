@@ -48,6 +48,7 @@ const signUpFormSchema = z
         required_error: 'Password is required.',
       })
       .min(8, { message: 'Password should be at least 8 characters long.' })
+      .max(15, { message: 'maximum password should be less than 15 characters' })
       .refine((value) => /[A-Z]/.test(value), {
         message: 'Password should contain at least one uppercase letter.',
       })
