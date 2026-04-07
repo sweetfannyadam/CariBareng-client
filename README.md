@@ -50,10 +50,6 @@ CariBareng adalah sebuah platform berbasis web yang dirancang untuk membantu mas
 6. **Melihat Laporan Barang Ditemukan**:
    - Navigasikan ke halaman **Found Items** untuk memeriksa barang yang ditemukan.
 
-### Akses Username dan Password Demo
-- Username: `{Masukkan username untuk uji coba}`
-- Password: `{Masukkan password untuk uji coba}`
-
 ## Teknologi yang Digunakan
 
 - **Frontend**: React.js, Tailwind CSS
@@ -80,17 +76,12 @@ CariBareng adalah sebuah platform berbasis web yang dirancang untuk membantu mas
 
 Panduan lengkap penggunaan aplikasi dapat diakses melalui dokumen berikut:
 [Dokumentasi Penggunaan CariBareng](https://docs.google.com/document/d/{Link_Tutorial_Aplikasi})
-**{Pastikan link dokumen Google ini diatur dengan akses view untuk publik}**
 
 ## Kontributor
 
 - **Syafaruddin** (Frontend)
 - **Windy Bintan Saputra** (Backend)
 - **Elizabeth Clara Pangaribuan** (Frontend)
-
-## Lisensi
-
-Aplikasi ini dilindungi oleh lisensi `{Tambahkan jenis lisensi jika ada}`.
 
 ---
 
